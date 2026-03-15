@@ -1,78 +1,112 @@
 import { getServices, getBrandAssets, getBrandCore, getCEOProfile } from '../lib/base44.js';
 
 // ─── Service category mapping ───────────────────────────────────────────────
-const CATEGORY_MAP = {
-  consultoria: {
-    label: 'Consultoría',
-    names: ['Arquitectura Viva', 'Te regalo una mirada', 'Performance Tech'],
-  },
-  experiencias: {
-    label: 'Experiencias',
-    names: ['Mesa de Líderes'],
-  },
-  aplicaciones: {
-    label: 'Aplicaciones',
-    names: ['4 MIRADAS', 'Miradas'],
-  },
+// Uses service_category field if present; falls back to keyword detection in name/description
+const CATEGORY_LABELS = {
+  consultoria:  'Consultoría',
+  experiencias: 'Experiencias',
+  aplicaciones: 'Aplicaciones',
 };
 
-function categorizeServices(services) {
-  const result = [];
-  for (const [key, cat] of Object.entries(CATEGORY_MAP)) {
-    const cards = cat.names.map(name => {
-      const found = services.find(s => s.name?.toLowerCase().includes(name.toLowerCase()));
-      return found ?? { name, tagline: '', description: '' };
-    });
-    result.push({ key, label: cat.label, services: cards });
+const CATEGORY_KEYWORDS = {
+  aplicaciones: ['plataforma', 'app', 'software', 'sistema operativo', 'os', '4 miradas', 'miradas', 'digital', 'herramienta'],
+  experiencias: ['mesa', 'taller', 'workshop', 'evento', 'retiro', 'programa', 'comunidad', 'experiencia'],
+};
+
+function detectCategory(svc) {
+  if (svc.service_category) return svc.service_category.toLowerCase().replace(/\s+/g, '_');
+  const text = `${svc.name} ${svc.description} ${svc.tagline}`.toLowerCase();
+  for (const [cat, kws] of Object.entries(CATEGORY_KEYWORDS)) {
+    if (kws.some(kw => text.includes(kw))) return cat;
   }
-  return result;
+  return 'consultoria';
+}
+
+function categorizeServices(services) {
+  const buckets = { consultoria: [], experiencias: [], aplicaciones: [] };
+  for (const svc of services) {
+    const cat = detectCategory(svc);
+    if (buckets[cat]) buckets[cat].push(svc);
+    else buckets.consultoria.push(svc);
+  }
+  return Object.entries(buckets)
+    .filter(([, svcs]) => svcs.length > 0)
+    .map(([key, svcs]) => ({ key, label: CATEGORY_LABELS[key] ?? key, services: svcs }));
 }
 
 // ─── Build CSS variables from BrandCore colors section ──────────────────────
-// Smart: detects actual color values (hex/rgb) regardless of field_name
+// Handles both pure hex fields AND hex colors embedded in text descriptions
+// e.g. "Violeta #B400FF, Amarillo #F7EA00, Cian #00F9F9 y Fucsia #FF0099"
 function buildCssVars(sections) {
   const colorSection = sections?.colores ?? {};
   const typogSection = sections?.tipografias ?? {};
 
-  const isColor = (v) => v && (/^#([0-9A-Fa-f]{3,8})$/.test(v.trim()) || /^rgb/i.test(v.trim()));
+  const isPureHex = (v) => v && /^#([0-9A-Fa-f]{3,8})$/.test(v.trim());
+  const isPureRgb = (v) => v && /^rgb/i.test(v.trim());
+  const isColor   = (v) => isPureHex(v) || isPureRgb(v);
 
-  // Keyword hints for semantic matching (order matters: first match wins)
+  // Extract { hex, context } tokens from all fields in colores section
+  // Supports both pure-hex field values and hex codes embedded in text
+  const tokens = [];
+  for (const [fieldName, fieldValue] of Object.entries(colorSection)) {
+    if (!fieldValue || typeof fieldValue !== 'string') continue;
+    if (isPureHex(fieldValue.trim())) {
+      tokens.push({ hex: fieldValue.trim(), context: fieldName.toLowerCase() });
+    } else if (isPureRgb(fieldValue.trim())) {
+      tokens.push({ hex: fieldValue.trim(), context: fieldName.toLowerCase() });
+    } else {
+      // Extract all #RRGGBB occurrences with surrounding text as context
+      const matches = [...fieldValue.matchAll(/#([0-9A-Fa-f]{6})\b/g)];
+      for (const m of matches) {
+        const start = Math.max(0, m.index - 50);
+        const end   = Math.min(fieldValue.length, m.index + 20);
+        const ctx   = fieldValue.slice(start, end).toLowerCase();
+        tokens.push({ hex: m[0], context: ctx });
+      }
+    }
+  }
+
+  // Semantic slots — keywords matched against field name + surrounding text
   const semanticSlots = [
-    { cssVar: '--accent',          keywords: ['principal', 'primario', 'acento', 'main', 'primary', 'marca', 'brand'] },
-    { cssVar: '--accent-alt',      keywords: ['secundario', 'second', 'complemento', 'alt', 'highlight'] },
-    { cssVar: '--bg',              keywords: ['fondo', 'background', 'base', 'bg', 'oscuro', 'dark'] },
-    { cssVar: '--bg-card',         keywords: ['tarjeta', 'card', 'superficie', 'surface', 'panel'] },
-    { cssVar: '--text',            keywords: ['texto', 'text', 'tipografia', 'fuente', 'blanco', 'white', 'claro'] },
-    { cssVar: '--text-secondary',  keywords: ['secundario_texto', 'texto_sec', 'muted', 'gris', 'gray', 'grey'] },
+    { cssVar: '--bg',             keywords: ['fondo', 'background', 'base', 'bg', 'oscuro', 'dark', 'negro', 'black', '000000'] },
+    { cssVar: '--text',           keywords: ['texto', 'text', 'blanco', 'white', 'claro', 'light', 'ffffff'] },
+    { cssVar: '--accent',         keywords: ['violeta', 'purple', 'principal', 'primario', 'acento', 'main', 'primary', 'marca', 'brand', 'electrico', 'eléctrico', 'b400ff'] },
+    { cssVar: '--accent-alt',     keywords: ['amarillo', 'yellow', 'secundario', 'second', 'alt', 'complemento', 'f7ea00'] },
+    { cssVar: '--accent-cyan',    keywords: ['cian', 'cyan', 'turquesa', 'teal', '00f9f9'] },
+    { cssVar: '--accent-pink',    keywords: ['fucsia', 'fuchsia', 'rosa', 'pink', 'magenta', 'ff0099'] },
   ];
 
   const assignments = {};
-  const usedKeys = new Set();
+  const usedHex = new Set();
 
-  // First pass: semantic matching
+  // First pass: semantic matching on context
   for (const { cssVar, keywords } of semanticSlots) {
-    for (const [fieldName, fieldValue] of Object.entries(colorSection)) {
-      if (usedKeys.has(fieldName) || !isColor(fieldValue)) continue;
-      if (keywords.some(kw => fieldName.toLowerCase().includes(kw))) {
-        assignments[cssVar] = fieldValue.trim();
-        usedKeys.add(fieldName);
+    for (const { hex, context } of tokens) {
+      if (usedHex.has(hex)) continue;
+      if (keywords.some(kw => context.includes(kw))) {
+        assignments[cssVar] = hex;
+        usedHex.add(hex);
         break;
       }
     }
   }
 
-  // Second pass: remaining color values fill unassigned slots in order
-  const remainingColors = Object.entries(colorSection)
-    .filter(([k, v]) => !usedKeys.has(k) && isColor(v))
-    .map(([, v]) => v.trim());
-  const unfilledSlots = semanticSlots.map(s => s.cssVar).filter(v => !assignments[v]);
-  remainingColors.forEach((color, i) => {
-    if (unfilledSlots[i]) assignments[unfilledSlots[i]] = color;
+  // Second pass: fill remaining unassigned slots in order
+  const remainingTokens = tokens.filter(t => !usedHex.has(t.hex));
+  const unfilledSlots   = semanticSlots.map(s => s.cssVar).filter(v => !assignments[v]);
+  remainingTokens.forEach(({ hex }, i) => {
+    if (unfilledSlots[i]) assignments[unfilledSlots[i]] = hex;
   });
+
+  // Derive dim/border variants from --accent
+  if (assignments['--accent']) {
+    assignments['--accent-dim']    = assignments['--accent'] + '18';
+    assignments['--accent-border'] = assignments['--accent'] + '40';
+  }
 
   // Typography: find any font name in tipografias section
   const fontEntry = Object.entries(typogSection)
-    .find(([k]) => ['principal', 'fuente', 'font', 'titulo', 'body'].some(kw => k.toLowerCase().includes(kw)));
+    .find(([k]) => ['principal', 'fuente', 'font', 'titulo', 'body', 'primaria'].some(kw => k.toLowerCase().includes(kw)));
   const fontFamily = fontEntry?.[1] ?? null;
 
   const lines = [];
