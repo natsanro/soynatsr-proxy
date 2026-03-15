@@ -9,8 +9,10 @@ const CATEGORY_LABELS = {
 };
 
 const CATEGORY_KEYWORDS = {
-  aplicaciones: ['plataforma', 'app', 'software', 'sistema operativo', 'os', '4 miradas', 'miradas', 'digital', 'herramienta'],
-  experiencias: ['mesa', 'taller', 'workshop', 'evento', 'retiro', 'programa', 'comunidad', 'experiencia'],
+  // Only match when clearly a digital product / platform
+  aplicaciones: ['plataforma', 'app ', 'software', 'sistema operativo', '4 miradas os', 'saas', 'suscripción digital', 'herramienta digital'],
+  // Only match when clearly a live/group experience
+  experiencias: ['taller', 'workshop', 'mesa redonda', 'evento', 'retiro', 'cohort', 'bootcamp', 'programa grupal', 'sesión grupal', 'experiencia colectiva'],
 };
 
 function detectCategory(svc) {
@@ -113,11 +115,15 @@ function buildCssVars(sections) {
   for (const [varName, value] of Object.entries(assignments)) {
     if (value) lines.push(`  ${varName}: ${value};`);
   }
-  if (fontFamily && !isColor(fontFamily)) {
-    lines.push(`  --font: '${fontFamily}', -apple-system, BlinkMacSystemFont, sans-serif;`);
+  const resolvedFont = fontFamily && !isColor(fontFamily) ? fontFamily : null;
+  if (resolvedFont) {
+    lines.push(`  --font: '${resolvedFont}', -apple-system, BlinkMacSystemFont, sans-serif;`);
   }
 
-  return lines.length ? `:root {\n${lines.join('\n')}\n}` : '';
+  return {
+    css: lines.length ? `:root {\n${lines.join('\n')}\n}` : '',
+    fontFamily: resolvedFont,
+  };
 }
 
 // ─── Extract best text from a BrandCore section ─────────────────────────────
@@ -129,13 +135,24 @@ function pickText(sectionObj, minLen = 30) {
   return entries.reduce((a, b) => (b.length > a.length ? b : a));
 }
 
-// ─── Pillar icons ────────────────────────────────────────────────────────────
-const PILLARS = [
-  { icon: '◈', label: 'Liderazgo' },
-  { icon: '⬡', label: 'Estructura' },
-  { icon: '◎', label: 'Operación' },
-  { icon: '⟁', label: 'Tecnología' },
-  { icon: '∿', label: 'Datos' },
+// ─── Truncate bio to first N sentences ──────────────────────────────────────
+// Prevents the full raw historia from flooding the "Sobre mí" section
+function truncateBio(text, maxSentences = 3, maxChars = 400) {
+  if (!text) return null;
+  // Sentence split on ". ", "! ", "? " boundaries
+  const sentences = text.trim().split(/(?<=[.!?])\s+/);
+  const slice = sentences.slice(0, maxSentences).join(' ');
+  if (slice.length <= maxChars) return slice;
+  // Fallback hard-trim at word boundary
+  return slice.slice(0, maxChars).replace(/\s+\S*$/, '') + '…';
+}
+
+// ─── 4 MIRADAS methodology pillars ───────────────────────────────────────────
+const MIRADAS_4 = [
+  { icon: '◈', label: 'Estratégica',    desc: 'Visión y liderazgo' },
+  { icon: '⬡', label: 'Organizacional', desc: 'Estructura y equipos' },
+  { icon: '◎', label: 'Procesos',       desc: 'Operación y sistemas' },
+  { icon: '∿', label: 'Data',           desc: 'Métricas e inteligencia' },
 ];
 
 // ─── Scroll reveal script ────────────────────────────────────────────────────
@@ -166,8 +183,12 @@ export default async function PortfolioWebsiteTemplate() {
   const tone      = sections?.tono            ?? {};
   const contactBC = sections?.contacto        ?? {};
 
-  // Dynamic CSS vars injected from BrandCore
-  const cssVars = buildCssVars(sections);
+  // Dynamic CSS vars + font family from BrandCore
+  const { css: cssVars, fontFamily: brandFont } = buildCssVars(sections);
+  // If BrandCore has a custom font, inject Google Fonts @import so the browser loads it
+  const fontImport = brandFont
+    ? `@import url('https://fonts.googleapis.com/css2?family=${brandFont.trim().replace(/\s+/g, '+')}:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');`
+    : null;
 
   // Hero image
   const heroAsset =
@@ -207,8 +228,9 @@ export default async function PortfolioWebsiteTemplate() {
     pickText(tone, 40)          ??
     'Integro liderazgo, estructura, operación, tecnología y datos para que tu empresa avance con más claridad y coherencia.';
 
-  // About copy — CEOProfile bio is the best source, then BrandCore
-  const aboutText =
+  // About copy — CEOProfile bio is the best source, then BrandCore historia
+  // Always truncate to avoid dumping the full raw text
+  const rawAbout =
     ceoProfile?.bio             ??
     narrative.sobre_mi          ??
     identity.descripcion        ??
@@ -216,6 +238,7 @@ export default async function PortfolioWebsiteTemplate() {
     pickText(sections?.historia, 80) ??
     pickText(identity, 80)      ??
     'Soy estratega, diseño sistemas claros para líderes que quieren ordenar su realidad y construir estructuras que funcionen de verdad. Integro liderazgo, operación, tecnología y datos desde la metodología 4 MIRADAS.';
+  const aboutText = truncateBio(rawAbout, 3, 420);
 
   const aboutTagline =
     ceoProfile?.tagline         ??
@@ -229,8 +252,10 @@ export default async function PortfolioWebsiteTemplate() {
 
   return (
     <>
-      {/* ── Dynamic brand colors from BrandCore ─────────────────── */}
-      {cssVars && <style dangerouslySetInnerHTML={{ __html: cssVars }} />}
+      {/* ── Brand styles: custom font @import + CSS variables ───── */}
+      {(fontImport || cssVars) && (
+        <style dangerouslySetInnerHTML={{ __html: [fontImport, cssVars].filter(Boolean).join('\n\n') }} />
+      )}
 
       {/* ── NAV ────────────────────────────────────────────────────── */}
       <nav className="nav">
@@ -276,15 +301,18 @@ export default async function PortfolioWebsiteTemplate() {
         </div>
       </section>
 
-      {/* ── PILLARS ────────────────────────────────────────────────── */}
+      {/* ── 4 MIRADAS METHODOLOGY ──────────────────────────────────── */}
       <div className="pillars reveal">
         <div className="pillars-inner">
-          <span className="pillars-text">Mi trabajo integra</span>
+          <span className="pillars-text">Metodología</span>
           <div className="pillars-list">
-            {PILLARS.map(p => (
-              <span key={p.label} className="pillar-tag">
-                <span className="pillar-icon">{p.icon}</span>
-                {p.label}
+            {MIRADAS_4.map(m => (
+              <span key={m.label} className="pillar-tag">
+                <span className="pillar-icon">{m.icon}</span>
+                <span>
+                  <strong style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)' }}>{m.label}</strong>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{m.desc}</span>
+                </span>
               </span>
             ))}
           </div>
