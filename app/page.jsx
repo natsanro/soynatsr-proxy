@@ -19,10 +19,6 @@ const CATEGORY_MAP = {
 function categorizeServices(services) {
   const result = [];
   for (const [key, cat] of Object.entries(CATEGORY_MAP)) {
-    const matched = cat.names
-      .map(name => services.find(s => s.name?.toLowerCase().includes(name.toLowerCase())))
-      .filter(Boolean);
-    // If no match from DB, show a placeholder card using the name directly
     const cards = cat.names.map(name => {
       const found = services.find(s => s.name?.toLowerCase().includes(name.toLowerCase()));
       return found ?? { name, tagline: '', description: '' };
@@ -32,7 +28,32 @@ function categorizeServices(services) {
   return result;
 }
 
-// ─── Pillar icons (inline SVG strings) ──────────────────────────────────────
+// ─── Build CSS variables from BrandCore colors section ──────────────────────
+function buildCssVars(sections) {
+  const c = sections?.colores ?? {};
+  const t = sections?.tipografias ?? {};
+
+  const colorMap = {
+    '--accent':          c.color_principal   ?? c.color_acento      ?? c.color_primario   ?? null,
+    '--accent-alt':      c.color_secundario  ?? c.color_complemento ?? null,
+    '--bg':              c.color_fondo       ?? c.color_base        ?? c.fondo            ?? null,
+    '--bg-card':         c.color_tarjeta     ?? c.color_superficie  ?? null,
+    '--text':            c.color_texto       ?? c.texto_principal   ?? null,
+    '--text-secondary':  c.color_texto_secundario ?? c.texto_secundario ?? null,
+  };
+
+  const fontFamily = t.fuente_principal ?? t.tipografia_principal ?? null;
+
+  const lines = [];
+  for (const [varName, value] of Object.entries(colorMap)) {
+    if (value) lines.push(`  ${varName}: ${value};`);
+  }
+  if (fontFamily) lines.push(`  --font: '${fontFamily}', -apple-system, BlinkMacSystemFont, sans-serif;`);
+
+  return lines.length ? `:root {\n${lines.join('\n')}\n}` : '';
+}
+
+// ─── Pillar icons ────────────────────────────────────────────────────────────
 const PILLARS = [
   { icon: '◈', label: 'Liderazgo' },
   { icon: '⬡', label: 'Estructura' },
@@ -41,7 +62,7 @@ const PILLARS = [
   { icon: '∿', label: 'Datos' },
 ];
 
-// ─── Scroll reveal script (injected once) ───────────────────────────────────
+// ─── Scroll reveal script ────────────────────────────────────────────────────
 const REVEAL_SCRIPT = `
 (function(){
   const els = document.querySelectorAll('.reveal');
@@ -55,7 +76,6 @@ const REVEAL_SCRIPT = `
 
 // ─── Page (Server Component) ─────────────────────────────────────────────────
 export default async function PortfolioWebsiteTemplate() {
-  // Fetch all data in parallel
   const [services, assets, brandCore, ceoProfile] = await Promise.all([
     getServices(),
     getBrandAssets(),
@@ -63,34 +83,75 @@ export default async function PortfolioWebsiteTemplate() {
     getCEOProfile(),
   ]);
 
-  // Pick hero image — prefer 'natalia' category or 'photo' type
+  const { sections } = brandCore;
+  const identity  = sections?.identidad       ?? {};
+  const narrative = sections?.narrativa       ?? {};
+  const position  = sections?.posicionamiento ?? {};
+  const tone      = sections?.tono            ?? {};
+  const contactBC = sections?.contacto        ?? {};
+
+  // Dynamic CSS vars injected from BrandCore
+  const cssVars = buildCssVars(sections);
+
+  // Hero image
   const heroAsset =
     assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) ||
     assets.find(a => a.category === 'natalia') ||
     assets.find(a => a.asset_type === 'photo') ||
     assets.find(a => a.category === 'visual');
 
-  // Pick about image — try a different photo if available
+  // About image
   const aboutAsset =
     assets.find(a => a.category === 'natalia' && a.id !== heroAsset?.id) ||
     heroAsset;
 
-  // Logo
+  // Logo — BrandAsset with type 'logo', fallback to BrandCore elementos_graficos
   const logoAsset = assets.find(a => a.asset_type === 'logo');
+  const logoUrl   = logoAsset?.file_url ?? sections?.elementos_graficos?.logo_url ?? null;
 
   const categorized = categorizeServices(services);
 
+  // Hero copy from BrandCore
+  const heroTitle =
+    narrative.hero_titulo    ??
+    position.propuesta_valor ??
+    'Ayudo a líderes a rediseñar su estructura, ordenar su realidad y construir sistemas que realmente funcionen.';
+
+  const heroSub =
+    narrative.hero_subtitulo    ??
+    position.descripcion_corta  ??
+    tone.voz                    ??
+    'Integro liderazgo, estructura, operación, tecnología y datos para que tu empresa avance con más claridad y coherencia.';
+
+  // About copy from BrandCore / CEOProfile
   const aboutText =
-    ceoProfile?.bio ||
-    brandCore?.description ||
+    ceoProfile?.bio             ??
+    narrative.sobre_mi          ??
+    identity.descripcion        ??
+    sections?.historia?.resumen ??
     'Soy estratega, diseño sistemas claros para líderes que quieren ordenar su realidad y construir estructuras que funcionen de verdad. Integro liderazgo, operación, tecnología y datos desde la metodología 4 MIRADAS.';
+
+  const aboutTagline =
+    ceoProfile?.tagline ??
+    narrative.tagline   ??
+    identity.tagline    ??
+    null;
+
+  // Contact
+  const calendlyUrl = contactBC.calendly ?? contactBC.agenda_url ?? 'https://calendly.com/natsr';
 
   return (
     <>
+      {/* ── Dynamic brand colors from BrandCore ─────────────────── */}
+      {cssVars && <style dangerouslySetInnerHTML={{ __html: cssVars }} />}
+
       {/* ── NAV ────────────────────────────────────────────────────── */}
       <nav className="nav">
         <a href="/" className="nav-logo">
-          Soy Nat <span>SR</span>
+          {logoUrl
+            ? <img src={logoUrl} alt="Soy Nat SR" className="nav-logo-img" />
+            : <>Soy Nat <span>SR</span></>
+          }
         </a>
         <ul className="nav-links">
           <li><a href="#consultoria">Consultoría</a></li>
@@ -109,14 +170,8 @@ export default async function PortfolioWebsiteTemplate() {
         <div className="hero-inner">
           <div className="hero-content">
             <span className="hero-tag">Metodología 4 MIRADAS</span>
-            <h1 className="hero-title">
-              Ayudo a líderes a rediseñar su estructura, ordenar su realidad y construir sistemas que{' '}
-              <em>realmente funcionen.</em>
-            </h1>
-            <p className="hero-sub">
-              Integro liderazgo, estructura, operación, tecnología y datos
-              para que tu empresa avance con más claridad y coherencia.
-            </p>
+            <h1 className="hero-title">{heroTitle}</h1>
+            <p className="hero-sub">{heroSub}</p>
             <div className="hero-actions">
               <a href="#servicios" className="btn-primary">Conocé mis servicios</a>
               <a href="#contacto" className="btn-secondary">Agendar llamada estratégica</a>
@@ -205,7 +260,7 @@ export default async function PortfolioWebsiteTemplate() {
               {ceoProfile?.name || 'Natalia Sánchez Rojas'}
             </h2>
             <p>{aboutText}</p>
-            {ceoProfile?.tagline && <p style={{ marginTop: '1rem' }}>{ceoProfile.tagline}</p>}
+            {aboutTagline && <p style={{ marginTop: '1rem' }}>{aboutTagline}</p>}
           </div>
         </div>
       </section>
@@ -243,12 +298,7 @@ export default async function PortfolioWebsiteTemplate() {
             sistema más claro para tu empresa, agendá una llamada estratégica.
           </p>
           <div className="contact-actions">
-            <a
-              href="https://calendly.com/natsr"
-              className="btn-primary"
-              target="_blank"
-              rel="noopener"
-            >
+            <a href={calendlyUrl} className="btn-primary" target="_blank" rel="noopener">
               Agendar llamada estratégica
             </a>
             <a href="https://cuatromiradas.soynatsr.com" className="btn-secondary" target="_blank" rel="noopener">
@@ -261,7 +311,12 @@ export default async function PortfolioWebsiteTemplate() {
       {/* ── FOOTER ─────────────────────────────────────────────────── */}
       <footer className="footer">
         <div className="footer-inner">
-          <a href="/" className="footer-logo">Soy Nat <span>SR</span></a>
+          <a href="/" className="footer-logo">
+            {logoUrl
+              ? <img src={logoUrl} alt="Soy Nat SR" className="footer-logo-img" />
+              : <>Soy Nat <span>SR</span></>
+            }
+          </a>
           <ul className="footer-links">
             <li><a href="#consultoria">Consultoría</a></li>
             <li><a href="#experiencias">Experiencias</a></li>
