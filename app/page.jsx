@@ -29,28 +29,70 @@ function categorizeServices(services) {
 }
 
 // ─── Build CSS variables from BrandCore colors section ──────────────────────
+// Smart: detects actual color values (hex/rgb) regardless of field_name
 function buildCssVars(sections) {
-  const c = sections?.colores ?? {};
-  const t = sections?.tipografias ?? {};
+  const colorSection = sections?.colores ?? {};
+  const typogSection = sections?.tipografias ?? {};
 
-  const colorMap = {
-    '--accent':          c.color_principal   ?? c.color_acento      ?? c.color_primario   ?? null,
-    '--accent-alt':      c.color_secundario  ?? c.color_complemento ?? null,
-    '--bg':              c.color_fondo       ?? c.color_base        ?? c.fondo            ?? null,
-    '--bg-card':         c.color_tarjeta     ?? c.color_superficie  ?? null,
-    '--text':            c.color_texto       ?? c.texto_principal   ?? null,
-    '--text-secondary':  c.color_texto_secundario ?? c.texto_secundario ?? null,
-  };
+  const isColor = (v) => v && (/^#([0-9A-Fa-f]{3,8})$/.test(v.trim()) || /^rgb/i.test(v.trim()));
 
-  const fontFamily = t.fuente_principal ?? t.tipografia_principal ?? null;
+  // Keyword hints for semantic matching (order matters: first match wins)
+  const semanticSlots = [
+    { cssVar: '--accent',          keywords: ['principal', 'primario', 'acento', 'main', 'primary', 'marca', 'brand'] },
+    { cssVar: '--accent-alt',      keywords: ['secundario', 'second', 'complemento', 'alt', 'highlight'] },
+    { cssVar: '--bg',              keywords: ['fondo', 'background', 'base', 'bg', 'oscuro', 'dark'] },
+    { cssVar: '--bg-card',         keywords: ['tarjeta', 'card', 'superficie', 'surface', 'panel'] },
+    { cssVar: '--text',            keywords: ['texto', 'text', 'tipografia', 'fuente', 'blanco', 'white', 'claro'] },
+    { cssVar: '--text-secondary',  keywords: ['secundario_texto', 'texto_sec', 'muted', 'gris', 'gray', 'grey'] },
+  ];
+
+  const assignments = {};
+  const usedKeys = new Set();
+
+  // First pass: semantic matching
+  for (const { cssVar, keywords } of semanticSlots) {
+    for (const [fieldName, fieldValue] of Object.entries(colorSection)) {
+      if (usedKeys.has(fieldName) || !isColor(fieldValue)) continue;
+      if (keywords.some(kw => fieldName.toLowerCase().includes(kw))) {
+        assignments[cssVar] = fieldValue.trim();
+        usedKeys.add(fieldName);
+        break;
+      }
+    }
+  }
+
+  // Second pass: remaining color values fill unassigned slots in order
+  const remainingColors = Object.entries(colorSection)
+    .filter(([k, v]) => !usedKeys.has(k) && isColor(v))
+    .map(([, v]) => v.trim());
+  const unfilledSlots = semanticSlots.map(s => s.cssVar).filter(v => !assignments[v]);
+  remainingColors.forEach((color, i) => {
+    if (unfilledSlots[i]) assignments[unfilledSlots[i]] = color;
+  });
+
+  // Typography: find any font name in tipografias section
+  const fontEntry = Object.entries(typogSection)
+    .find(([k]) => ['principal', 'fuente', 'font', 'titulo', 'body'].some(kw => k.toLowerCase().includes(kw)));
+  const fontFamily = fontEntry?.[1] ?? null;
 
   const lines = [];
-  for (const [varName, value] of Object.entries(colorMap)) {
+  for (const [varName, value] of Object.entries(assignments)) {
     if (value) lines.push(`  ${varName}: ${value};`);
   }
-  if (fontFamily) lines.push(`  --font: '${fontFamily}', -apple-system, BlinkMacSystemFont, sans-serif;`);
+  if (fontFamily && !isColor(fontFamily)) {
+    lines.push(`  --font: '${fontFamily}', -apple-system, BlinkMacSystemFont, sans-serif;`);
+  }
 
   return lines.length ? `:root {\n${lines.join('\n')}\n}` : '';
+}
+
+// ─── Extract best text from a BrandCore section ─────────────────────────────
+// Returns the longest/most relevant field value, ignoring very short entries
+function pickText(sectionObj, minLen = 30) {
+  if (!sectionObj) return null;
+  const entries = Object.values(sectionObj).filter(v => typeof v === 'string' && v.length >= minLen);
+  if (!entries.length) return null;
+  return entries.reduce((a, b) => (b.length > a.length ? b : a));
 }
 
 // ─── Pillar icons ────────────────────────────────────────────────────────────
@@ -111,30 +153,38 @@ export default async function PortfolioWebsiteTemplate() {
 
   const categorized = categorizeServices(services);
 
-  // Hero copy from BrandCore
+  // Hero copy — specific field names first, then pick longest text in section
   const heroTitle =
     narrative.hero_titulo    ??
+    narrative.titulo         ??
     position.propuesta_valor ??
+    position.titulo          ??
+    pickText(position, 40)   ??
     'Ayudo a líderes a rediseñar su estructura, ordenar su realidad y construir sistemas que realmente funcionen.';
 
   const heroSub =
     narrative.hero_subtitulo    ??
+    narrative.subtitulo         ??
     position.descripcion_corta  ??
     tone.voz                    ??
+    pickText(tone, 40)          ??
     'Integro liderazgo, estructura, operación, tecnología y datos para que tu empresa avance con más claridad y coherencia.';
 
-  // About copy from BrandCore / CEOProfile
+  // About copy — CEOProfile bio is the best source, then BrandCore
   const aboutText =
     ceoProfile?.bio             ??
     narrative.sobre_mi          ??
     identity.descripcion        ??
     sections?.historia?.resumen ??
+    pickText(sections?.historia, 80) ??
+    pickText(identity, 80)      ??
     'Soy estratega, diseño sistemas claros para líderes que quieren ordenar su realidad y construir estructuras que funcionen de verdad. Integro liderazgo, operación, tecnología y datos desde la metodología 4 MIRADAS.';
 
   const aboutTagline =
-    ceoProfile?.tagline ??
-    narrative.tagline   ??
-    identity.tagline    ??
+    ceoProfile?.tagline         ??
+    narrative.tagline           ??
+    identity.tagline            ??
+    sections?.promesa?.tagline  ??
     null;
 
   // Contact
