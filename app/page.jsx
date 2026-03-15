@@ -181,8 +181,11 @@ export default async function PortfolioWebsiteTemplate() {
     assets.find(a => a.category === 'natalia' && a.id !== heroAsset?.id) ||
     heroAsset;
 
-  // Logo — BrandAsset with type 'logo', fallback to BrandCore elementos_graficos
-  const logoAsset = assets.find(a => a.asset_type === 'logo');
+  // Logo — flexible match: 'logo', 'logos', 'LOGOS', etc. Prefers dark-bg version for dark site
+  const isLogoType = (t) => t && ['logo', 'logos'].includes(t.toLowerCase());
+  const logoAsset =
+    assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title} ${a.notes ?? ''}`)) ||
+    assets.find(a => isLogoType(a.asset_type));
   const logoUrl   = logoAsset?.file_url ?? sections?.elementos_graficos?.logo_url ?? null;
 
   const categorized = categorizeServices(services);
