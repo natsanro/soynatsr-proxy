@@ -101,7 +101,7 @@ export default async function ServiciosPage() {
           <div className="apps-grid">
             {aplicaciones.map(svc => (
               <div key={svc.id} className="app-card reveal">
-                <p className="app-card-label">Para {svc.tagline ? svc.tagline.toLowerCase() : 'líderes y consultores'}</p>
+                <p className="app-card-label">{svc.tagline || 'Para líderes y consultores'}</p>
                 <h3>{svc.name}</h3>
                 <p>{svc.description}</p>
                 <a href="https://cuatromiradas.soynatsr.com" className="tag" target="_blank" rel="noopener" style={{color:'var(--cyan)',borderColor:'rgba(0,249,249,0.35)',textDecoration:'none'}}>Acceder →</a>
