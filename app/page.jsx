@@ -257,6 +257,17 @@ export default async function PortfolioWebsiteTemplate() {
   const calendlyUrl    = contactBC.calendly ?? contactBC.agenda_url ?? 'https://calendly.com/natsr';
   const newsletterUrl  = contactBC.newsletter ?? contactBC.newsletter_url ?? sections?.redes_sociales?.newsletter ?? 'https://www.linkedin.com/newsletters/';
 
+  // ── All editable site texts from BrandCore (narrativa section) ──────────────
+  const metodologiaTitle   = narrative.metodologia_titulo   ?? 'Una mirada completa para una transformación real.';
+  const quoteText          = narrative.quote                ?? '// Cuando la cultura se alinea con la estrategia, el cambio deja de ser resistencia.';
+  const serviciosTitulo    = narrative.servicios_titulo     ?? 'El acompañamiento que tu empresa necesita hoy.';
+  const mesaHeadline       = narrative.mesa_headline        ?? 'Todo líder necesita un espacio íntimo para intercambiar miradas.';
+  const aplicacionesTitulo = narrative.aplicaciones_titulo  ?? 'Herramientas digitales para líderes en movimiento.';
+  const newsletterTitulo   = narrative.newsletter_titulo    ?? null;
+  const newsletterBodyText = narrative.newsletter_body      ?? null;
+  const contactoTitulo     = narrative.contacto_titulo      ?? '¿Querés trabajar conmigo?';
+  const contactoSub        = narrative.contacto_sub         ?? 'Si querés ordenar tu realidad, rediseñar tu estructura y construir un sistema más claro para tu empresa, agendá una llamada estratégica.';
+
   return (
     <>
       {/* ── Brand styles: custom font @import + CSS variables ───── */}
@@ -310,7 +321,7 @@ export default async function PortfolioWebsiteTemplate() {
       {/* ── 4 MIRADAS METHODOLOGY ──────────────────────────────────── */}
       <section id="metodologia" className="methodology">
         <div className="methodology-inner reveal">
-          <h2 className="methodology-title">Una mirada completa para una transformación real.</h2>
+          <h2 className="methodology-title">{metodologiaTitle}</h2>
           <div className="methodology-grid">
             {MIRADAS_4.map(m => (
               <div key={m.label} className="mirada-item">
@@ -324,7 +335,7 @@ export default async function PortfolioWebsiteTemplate() {
 
       {/* ── QUOTE ──────────────────────────────────────────────────── */}
       <div className="quote-block">
-        <p>// Cuando la cultura se alinea con la estrategia, el cambio deja de ser resistencia.</p>
+        <p>{quoteText}</p>
       </div>
 
       {/* ── CONSULTORÍA ─────────────────────────────────────────────── */}
@@ -333,7 +344,7 @@ export default async function PortfolioWebsiteTemplate() {
           <div className="services-inner">
             <div className="services-header reveal">
               <span className="section-label">Consultoría</span>
-              <h2 className="section-title">El acompañamiento que tu empresa necesita hoy.</h2>
+              <h2 className="section-title">{serviciosTitulo}</h2>
             </div>
             <div className="cards-grid reveal" style={{ transitionDelay: '0.1s' }}>
               {consultoriaServices.map((svc, si) => (
@@ -364,9 +375,7 @@ export default async function PortfolioWebsiteTemplate() {
           />
           <div className="mesa-content reveal">
             <span className="section-label">Experiencias</span>
-            <h2 className="mesa-headline">
-              Todo líder necesita un espacio íntimo para intercambiar miradas.
-            </h2>
+            <h2 className="mesa-headline">{mesaHeadline}</h2>
             <h3 className="mesa-name">{mesaService.name}</h3>
             {mesaService.tagline && (
               <p className="mesa-tagline">{mesaService.tagline}</p>
@@ -387,7 +396,7 @@ export default async function PortfolioWebsiteTemplate() {
           <div className="services-inner">
             <div className="services-header reveal">
               <span className="section-label">Aplicaciones</span>
-              <h2 className="section-title">Herramientas digitales para líderes en movimiento.</h2>
+              <h2 className="section-title">{aplicacionesTitulo}</h2>
             </div>
             <div className="cards-grid reveal" style={{ transitionDelay: '0.1s' }}>
               {aplicacionesServices.map((svc, si) => (
@@ -433,12 +442,9 @@ export default async function PortfolioWebsiteTemplate() {
       {/* ── NEWSLETTER ─────────────────────────────────────────────── */}
       <section className="newsletter">
         <div className="newsletter-box reveal">
-          <h2 className="newsletter-title">Despeja el ruido.<br />Recibe una mirada distinta.</h2>
+          <h2 className="newsletter-title">{newsletterTitulo ?? <>Despeja el ruido.<br />Recibe una mirada distinta.</>}</h2>
           <p className="newsletter-body">
-            Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones
-            sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches,
-            son perspectivas profundas para entender tu empresa desde sus raíces y decidir
-            con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.
+            {newsletterBodyText ?? <>Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches, son perspectivas profundas para entender tu empresa desde sus raíces y decidir con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.</>}
           </p>
           <a href={newsletterUrl} className="btn-newsletter" target="_blank" rel="noopener">
             Suscríbete a la Bitácora 4 MIRADAS
@@ -450,11 +456,8 @@ export default async function PortfolioWebsiteTemplate() {
       <section id="contacto" className="contact">
         <div className="contact-inner reveal">
           <span className="section-label">Trabajemos juntos</span>
-          <h2 className="section-title">¿Querés trabajar conmigo?</h2>
-          <p className="section-subtitle">
-            Si querés ordenar tu realidad, rediseñar tu estructura y construir un
-            sistema más claro para tu empresa, agendá una llamada estratégica.
-          </p>
+          <h2 className="section-title">{contactoTitulo}</h2>
+          <p className="section-subtitle">{contactoSub}</p>
           <div className="contact-actions">
             <a href={calendlyUrl} className="btn-primary" target="_blank" rel="noopener">
               Agendar llamada estratégica
