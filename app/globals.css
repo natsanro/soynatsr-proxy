@@ -358,6 +358,54 @@ section { padding: 7rem 5%; }
   padding: 0.7rem 1.25rem;
 }
 
+/* ── Mesa de Líderes — cinematic split ── */
+.mesa-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+  background: var(--bg);
+}
+.mesa-photo {
+  background-color: #111;
+  background-size: cover;
+  background-position: center;
+  min-height: 500px;
+}
+.mesa-content {
+  padding: 6rem 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  max-width: 580px;
+}
+.mesa-headline {
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--text);
+}
+.mesa-name {
+  font-family: 'Anton', sans-serif;
+  font-weight: normal;
+  font-size: 2rem;
+  color: var(--accent);
+  margin: 0;
+}
+.mesa-tagline {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin: 0;
+}
+.mesa-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin: 0;
+}
+
 /* ── About ── */
 .about { background: var(--bg-subtle); }
 .about-inner {
@@ -494,6 +542,9 @@ section { padding: 7rem 5%; }
   .about-image img { max-width: 340px; height: 400px; }
   .nav-links { display: none; }
   .methodology-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .mesa-section { grid-template-columns: 1fr; }
+  .mesa-photo { min-height: 320px; }
+  .mesa-content { padding: 4rem 1.5rem; max-width: 100%; }
 }
 
 @media (max-width: 600px) {

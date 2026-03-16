@@ -209,7 +209,13 @@ export default async function PortfolioWebsiteTemplate() {
     assets.find(a => isLogoType(a.asset_type));
   const logoUrl   = logoAsset?.file_url ?? sections?.elementos_graficos?.logo_url ?? null;
 
-  const categorized = categorizeServices(services);
+  // Mesa de Líderes — pulled out as its own cinematic section
+  const mesaService        = services.find(s => /mesa/i.test(s.name));
+  const consultoriaServices = services.filter(s => detectCategory(s) === 'consultoria' && !/mesa/i.test(s.name));
+  const aplicacionesServices = services.filter(s => detectCategory(s) === 'aplicaciones');
+
+  // Photo for Mesa de Líderes section — look for BrandAsset with "mesa" in title/notes
+  const mesaPhoto = assets.find(a => /mesa/i.test(`${a.title ?? ''} ${a.notes ?? ''}`));
 
   // Hero copy — specific field names first, then pick longest text in section
   const heroTitle =
@@ -321,34 +327,87 @@ export default async function PortfolioWebsiteTemplate() {
         <p>// Cuando la cultura se alinea con la estrategia, el cambio deja de ser resistencia.</p>
       </div>
 
-      {/* ── SERVICES ───────────────────────────────────────────────── */}
-      <section id="servicios" className="services-section">
-        <div className="services-inner">
-          <div className="services-header reveal">
-            <span className="section-label">Portfolio</span>
-            <h2 className="section-title">El acompañamiento que tu empresa necesita hoy.</h2>
+      {/* ── CONSULTORÍA ─────────────────────────────────────────────── */}
+      {consultoriaServices.length > 0 && (
+        <section id="servicios" className="services-section">
+          <div className="services-inner">
+            <div className="services-header reveal">
+              <span className="section-label">Consultoría</span>
+              <h2 className="section-title">El acompañamiento que tu empresa necesita hoy.</h2>
+            </div>
+            <div className="cards-grid reveal" style={{ transitionDelay: '0.1s' }}>
+              {consultoriaServices.map((svc, si) => (
+                <div key={si} className="service-card">
+                  <h3 className="service-card-name">{svc.name}</h3>
+                  {svc.tagline && <p className="service-card-tagline">{svc.tagline}</p>}
+                  {svc.description && (
+                    <p className="service-card-desc">
+                      {svc.description.length > 220 ? svc.description.slice(0, 220) + '…' : svc.description}
+                    </p>
+                  )}
+                  <a href={calendlyUrl} className="btn-primary service-card-cta" target="_blank" rel="noopener">
+                    Más información
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
+      )}
 
-          <div className="cards-grid reveal" style={{ transitionDelay: '0.1s' }}>
-            {services.map((svc, si) => (
-              <div key={si} className="service-card">
-                <h3 className="service-card-name">{svc.name}</h3>
-                {svc.tagline && <p className="service-card-tagline">{svc.tagline}</p>}
-                {svc.description && (
-                  <p className="service-card-desc">
-                    {svc.description.length > 220
-                      ? svc.description.slice(0, 220) + '…'
-                      : svc.description}
-                  </p>
-                )}
-                <a href={calendlyUrl} className="btn-primary service-card-cta" target="_blank" rel="noopener">
-                  Más información
-                </a>
-              </div>
-            ))}
+      {/* ── MESA DE LÍDERES — cinematic split ───────────────────────── */}
+      {mesaService && (
+        <section className="mesa-section">
+          <div
+            className="mesa-photo"
+            style={mesaPhoto?.file_url ? { backgroundImage: `url(${mesaPhoto.file_url})` } : {}}
+          />
+          <div className="mesa-content reveal">
+            <span className="section-label">Experiencias</span>
+            <h2 className="mesa-headline">
+              Todo líder necesita un espacio íntimo para intercambiar miradas.
+            </h2>
+            <h3 className="mesa-name">{mesaService.name}</h3>
+            {mesaService.tagline && (
+              <p className="mesa-tagline">{mesaService.tagline}</p>
+            )}
+            {mesaService.description && (
+              <p className="mesa-desc">{mesaService.description}</p>
+            )}
+            <a href={calendlyUrl} className="btn-primary" target="_blank" rel="noopener">
+              Únete a la Mesa
+            </a>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* ── APLICACIONES ────────────────────────────────────────────── */}
+      {aplicacionesServices.length > 0 && (
+        <section className="services-section" style={{ paddingTop: '5rem' }}>
+          <div className="services-inner">
+            <div className="services-header reveal">
+              <span className="section-label">Aplicaciones</span>
+              <h2 className="section-title">Herramientas digitales para líderes en movimiento.</h2>
+            </div>
+            <div className="cards-grid reveal" style={{ transitionDelay: '0.1s' }}>
+              {aplicacionesServices.map((svc, si) => (
+                <div key={si} className="service-card">
+                  <h3 className="service-card-name">{svc.name}</h3>
+                  {svc.tagline && <p className="service-card-tagline">{svc.tagline}</p>}
+                  {svc.description && (
+                    <p className="service-card-desc">
+                      {svc.description.length > 220 ? svc.description.slice(0, 220) + '…' : svc.description}
+                    </p>
+                  )}
+                  <a href="https://cuatromiradas.soynatsr.com" className="btn-primary service-card-cta" target="_blank" rel="noopener">
+                    Acceder
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── ABOUT ──────────────────────────────────────────────────── */}
       <section id="sobre-mi" className="about">
