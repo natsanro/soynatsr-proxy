@@ -2,7 +2,12 @@ import { getBrandAssets, getBrandCore } from '../../lib/base44.js';
 import Nav from '../components/Nav.js';
 import Cursor from '../components/Cursor.js';
 
-export const metadata = { title: 'Contacto — Natalia Sánchez Rojas' };
+export const metadata = {
+  title: 'Contacto — Natalia Sánchez Rojas',
+  description: 'Agendá una sesión estratégica de 60 minutos sin costo. La primera mirada es gratis.',
+  openGraph: { title: 'Contacto — Natalia Sánchez Rojas', url: 'https://soynatsr.com/contacto' },
+  twitter: { card: 'summary_large_image' },
+};
 
 const FORM_SCRIPT = `document.querySelector('.contact-form')?.addEventListener('submit',function(e){e.preventDefault();var btn=e.target.querySelector('.form-submit');btn.textContent='✓ Mensaje enviado';btn.style.background='#1a8a1a';setTimeout(function(){btn.textContent='Enviar mensaje';btn.style.background='';},3000);});`;
 

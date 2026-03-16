@@ -5,7 +5,16 @@ import Cursor from '../components/Cursor.js';
 
 const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
 
-export const metadata = { title: 'Sobre mí — Natalia Sánchez Rojas' };
+export async function generateMetadata() {
+  const assets = await getBrandAssets();
+  const hero = assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) || assets.find(a => a.category === 'natalia');
+  const images = hero?.file_url ? [{ url: hero.file_url, width: 1200, height: 630, alt: 'Natalia Sánchez Rojas' }] : [];
+  return {
+    title: 'Sobre mí — Natalia Sánchez Rojas',
+    openGraph: { title: 'Sobre mí — Natalia Sánchez Rojas', url: 'https://soynatsr.com/sobre', images },
+    twitter: { images: images.map(i => i.url) },
+  };
+}
 
 export default async function SobrePage() {
   const [assets, brandCore, ceoProfile] = await Promise.all([getBrandAssets(), getBrandCore(), getCEOProfile()]);

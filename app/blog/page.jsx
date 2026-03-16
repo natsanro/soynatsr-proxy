@@ -4,7 +4,12 @@ import Cursor from '../components/Cursor.js';
 
 const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
 
-export const metadata = { title: 'Bitácora Estratégica — Natalia Sánchez Rojas' };
+export const metadata = {
+  title: 'Bitácora Estratégica — Natalia Sánchez Rojas',
+  description: 'Reflexiones sobre estrategia, liderazgo consciente y las 4 Miradas™ aplicadas al mundo real.',
+  openGraph: { title: 'Bitácora Estratégica', url: 'https://soynatsr.com/blog' },
+  twitter: { card: 'summary_large_image' },
+};
 
 const POSTS_FEATURED = [
   { date:'Mar 11, 2026', mirada:'vi', miradaLabel:'Estratégica', title:'Tu empresa no tiene un problema de estrategia. Tiene un problema de consciencia.', body:'Cada vez que una empresa me llama porque "la estrategia no está funcionando", lo primero que busco no está en los números ni en los procesos. Está en las conversaciones que el líder evita tener.' },

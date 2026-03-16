@@ -5,7 +5,12 @@ import Cursor from '../components/Cursor.js';
 
 const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
 
-export const metadata = { title: 'Servicios — Natalia Sánchez Rojas' };
+export const metadata = {
+  title: 'Servicios — Natalia Sánchez Rojas',
+  description: 'Consultoría estratégica, acompañamiento 1:1, Mesa de Líderes y aplicaciones. Cada servicio nace de las 4 Miradas™.',
+  openGraph: { title: 'Servicios — Natalia Sánchez Rojas', url: 'https://soynatsr.com/servicios' },
+  twitter: { card: 'summary_large_image' },
+};
 
 function detectCategory(svc) {
   if (svc.service_category) return svc.service_category.toLowerCase().replace(/\s+/g,'_');

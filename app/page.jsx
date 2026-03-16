@@ -35,6 +35,16 @@ const REVEAL_SCRIPT = `(function(){
   els.forEach(function(el){io.observe(el);});
 })();`;
 
+export async function generateMetadata() {
+  const assets = await getBrandAssets();
+  const hero = assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) || assets.find(a => a.category === 'natalia');
+  const images = hero?.file_url ? [{ url: hero.file_url, width: 1200, height: 630, alt: 'Natalia Sánchez Rojas' }] : [];
+  return {
+    openGraph: { url: 'https://soynatsr.com', images },
+    twitter: { images: images.map(i => i.url) },
+  };
+}
+
 export default async function HomePage() {
   const [services, assets, brandCore, ceoProfile] = await Promise.all([
     getServices(), getBrandAssets(), getBrandCore(), getCEOProfile(),
