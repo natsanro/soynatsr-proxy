@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getServices, getBrandCore } from '../../lib/base44.js';
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Servicios — Natalia Sánchez Rojas',
