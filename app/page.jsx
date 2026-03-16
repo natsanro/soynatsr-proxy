@@ -333,16 +333,24 @@ export default async function PortfolioWebsiteTemplate() {
         </div>
       </section>
 
-      {/* ── NEWSLETTER ─────────────────────────────────────────────── */}
-      <section className="newsletter">
-        <div className="newsletter-box reveal">
-          <h2 className="newsletter-title">{newsletterTitulo ?? <>Despeja el ruido.<br />Recibe una mirada distinta.</>}</h2>
-          <p className="newsletter-body">
-            {newsletterBodyText ?? <>Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches, son perspectivas profundas para entender tu empresa desde sus raíces y decidir con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.</>}
-          </p>
-          <a href={newsletterUrl} className="btn-newsletter" target="_blank" rel="noopener">
-            Suscríbete a la Bitácora 4 MIRADAS
-          </a>
+      {/* ── ABOUT ──────────────────────────────────────────────────── */}
+      <section id="sobre-mi" className="about">
+        <div className="about-inner">
+          <div className="about-image reveal">
+            {aboutAsset?.file_url ? (
+              <img src={aboutAsset.file_url} alt="Natalia Sánchez Rojas" />
+            ) : (
+              <div style={{ width: '100%', height: '480px', background: 'var(--bg-card)', borderRadius: '16px' }} />
+            )}
+          </div>
+          <div className="about-body reveal" style={{ transitionDelay: '0.15s' }}>
+            <span className="section-label">Sobre mí</span>
+            <h2 className="section-title">
+              {ceoProfile?.name || 'Natalia Sánchez Rojas'}
+            </h2>
+            <p>{aboutText}</p>
+            {aboutTagline && <p style={{ marginTop: '1rem' }}>{aboutTagline}</p>}
+          </div>
         </div>
       </section>
 
@@ -398,6 +406,19 @@ export default async function PortfolioWebsiteTemplate() {
         </section>
       )}
 
+      {/* ── NEWSLETTER ─────────────────────────────────────────────── */}
+      <section className="newsletter">
+        <div className="newsletter-box reveal">
+          <h2 className="newsletter-title">{newsletterTitulo ?? <>Despeja el ruido.<br />Recibe una mirada distinta.</>}</h2>
+          <p className="newsletter-body">
+            {newsletterBodyText ?? <>Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches, son perspectivas profundas para entender tu empresa desde sus raíces y decidir con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.</>}
+          </p>
+          <a href={newsletterUrl} className="btn-newsletter" target="_blank" rel="noopener">
+            Suscríbete a la Bitácora 4 MIRADAS
+          </a>
+        </div>
+      </section>
+
       {/* ── APLICACIONES ────────────────────────────────────────────── */}
       {aplicacionesServices.length > 0 && (
         <section className="services-section" style={{ paddingTop: '5rem' }}>
@@ -425,27 +446,6 @@ export default async function PortfolioWebsiteTemplate() {
           </div>
         </section>
       )}
-
-      {/* ── ABOUT ──────────────────────────────────────────────────── */}
-      <section id="sobre-mi" className="about">
-        <div className="about-inner">
-          <div className="about-image reveal">
-            {aboutAsset?.file_url ? (
-              <img src={aboutAsset.file_url} alt="Natalia Sánchez Rojas" />
-            ) : (
-              <div style={{ width: '100%', height: '480px', background: 'var(--bg-card)', borderRadius: '16px' }} />
-            )}
-          </div>
-          <div className="about-body reveal" style={{ transitionDelay: '0.15s' }}>
-            <span className="section-label">Sobre mí</span>
-            <h2 className="section-title">
-              {ceoProfile?.name || 'Natalia Sánchez Rojas'}
-            </h2>
-            <p>{aboutText}</p>
-            {aboutTagline && <p style={{ marginTop: '1rem' }}>{aboutTagline}</p>}
-          </div>
-        </div>
-      </section>
 
       {/* ── CONTACT ────────────────────────────────────────────────── */}
       <section id="contacto" className="contact">
