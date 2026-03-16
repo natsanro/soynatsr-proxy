@@ -147,12 +147,12 @@ function truncateBio(text, maxSentences = 3, maxChars = 400) {
   return slice.slice(0, maxChars).replace(/\s+\S*$/, '') + '…';
 }
 
-// ─── 4 MIRADAS methodology pillars — with brand accent colors ────────────────
+// ─── 4 MIRADAS methodology — full descriptions matching Experience page ───────
 const MIRADAS_4 = [
-  { icon: '◈', label: 'Estratégica',    desc: 'Consciencia del líder y visión',            color: '#B400FF' },
-  { icon: '⬡', label: 'Funcional',      desc: 'Procesos, roles y flujos',                  color: '#F7EA00' },
-  { icon: '∿', label: 'Data',           desc: 'Tecnología, métricas e información',        color: '#00F9F9' },
-  { icon: '◎', label: 'Organizacional', desc: 'Cultura, patrones y energía del equipo',    color: '#FF0099' },
+  { label: 'Mirada Estratégica',    desc: 'Consciencia del líder y visión. ¿Hacia dónde vas realmente? ¿Qué decisiones te acercan o alejan de tu propósito?',                                  color: '#B400FF' },
+  { label: 'Mirada Funcional',      desc: 'Procesos, roles y flujos. Diseñamos cómo funciona tu empresa para crecer con orden sin perder agilidad.',                                            color: '#F7EA00' },
+  { label: 'Mirada Data',           desc: 'Tecnología, métricas e información. Transformamos datos en decisiones, y la tecnología en una aliada estratégica.',                                  color: '#00F9F9' },
+  { label: 'Mirada Organizacional', desc: 'Cultura, patrones y energía del equipo. Alineamos a las personas con la estrategia para que el cambio sea evolución.',                              color: '#FF0099' },
 ];
 
 // ─── Scroll reveal script ────────────────────────────────────────────────────
@@ -267,9 +267,8 @@ export default async function PortfolioWebsiteTemplate() {
           }
         </a>
         <ul className="nav-links">
-          <li><a href="#consultoria">Consultoría</a></li>
-          <li><a href="#experiencias">Experiencias</a></li>
-          <li><a href="#aplicaciones">Aplicaciones</a></li>
+          <li><a href="#metodologia">Metodología</a></li>
+          <li><a href="#servicios">Servicios</a></li>
           <li><a href="#sobre-mi">Sobre mí</a></li>
           <li><a href="#contacto">Contacto</a></li>
         </ul>
@@ -303,57 +302,48 @@ export default async function PortfolioWebsiteTemplate() {
       </section>
 
       {/* ── 4 MIRADAS METHODOLOGY ──────────────────────────────────── */}
-      <div className="pillars reveal">
-        <div className="pillars-inner">
-          <span className="pillars-text">Las 4 miradas con las que profundizamos</span>
-          <div className="pillars-list">
+      <section id="metodologia" className="methodology">
+        <div className="methodology-inner reveal">
+          <h2 className="methodology-title">Una mirada completa para una transformación real.</h2>
+          <div className="methodology-grid">
             {MIRADAS_4.map(m => (
-              <span key={m.label} className="pillar-tag" style={{ borderColor: `${m.color}30` }}>
-                <span className="pillar-icon" style={{ color: m.color }}>{m.icon}</span>
-                <span>
-                  <strong style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: m.color }}>{m.label}</strong>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{m.desc}</span>
-                </span>
-              </span>
+              <div key={m.label} className="mirada-item">
+                <h3 className="mirada-name" style={{ color: m.color }}>{m.label}</h3>
+                <p className="mirada-desc">{m.desc}</p>
+              </div>
             ))}
           </div>
         </div>
+      </section>
+
+      {/* ── QUOTE ──────────────────────────────────────────────────── */}
+      <div className="quote-block">
+        <p>// Cuando la cultura se alinea con la estrategia, el cambio deja de ser resistencia.</p>
       </div>
 
       {/* ── SERVICES ───────────────────────────────────────────────── */}
-      <section id="servicios" style={{ background: 'var(--bg)' }}>
+      <section id="servicios" className="services-section">
         <div className="services-inner">
           <div className="services-header reveal">
             <span className="section-label">Portfolio</span>
-            <h2 className="section-title">Servicios</h2>
-            <p className="section-subtitle">
-              Acompaño a líderes y empresas a ordenar su realidad y construir
-              sistemas que funcionen con claridad y coherencia.
-            </p>
+            <h2 className="section-title">El acompañamiento que tu empresa necesita hoy.</h2>
           </div>
 
-          <div className="categories">
-            {categorized.map((cat, ci) => (
-              <div key={cat.key} id={cat.key} className="reveal" style={{ transitionDelay: `${ci * 0.1}s` }}>
-                <p className="category-label">{cat.label}</p>
-                <div className="cards-grid">
-                  {cat.services.map((svc, si) => (
-                    <div key={si} className="service-card">
-                      <h3 className="service-card-name">{svc.name}</h3>
-                      {svc.tagline && <p className="service-card-tagline">{svc.tagline}</p>}
-                      {svc.description && (
-                        <p className="service-card-desc">
-                          {svc.description.length > 160
-                            ? svc.description.slice(0, 160) + '…'
-                            : svc.description}
-                        </p>
-                      )}
-                      <a href="#contacto" className="btn-ghost" style={{ marginTop: 'auto' }}>
-                        Ver servicio →
-                      </a>
-                    </div>
-                  ))}
-                </div>
+          <div className="cards-grid reveal" style={{ transitionDelay: '0.1s' }}>
+            {services.map((svc, si) => (
+              <div key={si} className="service-card">
+                <h3 className="service-card-name">{svc.name}</h3>
+                {svc.tagline && <p className="service-card-tagline">{svc.tagline}</p>}
+                {svc.description && (
+                  <p className="service-card-desc">
+                    {svc.description.length > 220
+                      ? svc.description.slice(0, 220) + '…'
+                      : svc.description}
+                  </p>
+                )}
+                <a href={calendlyUrl} className="btn-primary service-card-cta" target="_blank" rel="noopener">
+                  Más información
+                </a>
               </div>
             ))}
           </div>
@@ -427,10 +417,10 @@ export default async function PortfolioWebsiteTemplate() {
             }
           </a>
           <ul className="footer-links">
-            <li><a href="#consultoria">Consultoría</a></li>
-            <li><a href="#experiencias">Experiencias</a></li>
-            <li><a href="#aplicaciones">Aplicaciones</a></li>
+            <li><a href="#metodologia">Metodología</a></li>
+            <li><a href="#servicios">Servicios</a></li>
             <li><a href="#sobre-mi">Sobre mí</a></li>
+            <li><a href="#contacto">Contacto</a></li>
             <li><a href="https://www.linkedin.com/in/nataliasanchezrojas" target="_blank" rel="noopener">LinkedIn</a></li>
             <li><a href="https://www.instagram.com/soynatsr" target="_blank" rel="noopener">Instagram</a></li>
           </ul>

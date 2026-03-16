@@ -252,108 +252,110 @@ section { padding: 7rem 5%; }
   pointer-events: none;
 }
 
-/* ── Pillars ── */
-.pillars {
+/* ── Methodology (4 MIRADAS) ── */
+.methodology {
+  background: var(--bg);
+  padding: 7rem 5%;
+  text-align: center;
+}
+.methodology-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.methodology-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 3.5rem;
+}
+.methodology-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem 4rem;
+  text-align: left;
+}
+.mirada-name {
+  font-family: 'Anton', sans-serif;
+  font-weight: normal;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+.mirada-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Quote block ── */
+.quote-block {
   padding: 4rem 5%;
+  text-align: center;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  background: var(--bg);
 }
-.pillars-inner {
-  max-width: 1200px;
+.quote-block p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  color: var(--text-secondary);
+  max-width: 780px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  flex-wrap: wrap;
+  line-height: 1.6;
 }
-.pillars-text {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-  max-width: 160px;
-  line-height: 1.5;
-}
-.pillars-list {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  flex: 1;
-}
-.pillar-tag {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.65rem 1.25rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: border-color var(--transition), transform var(--transition);
-  line-height: 1.25;
-}
-.pillar-tag:hover { border-color: var(--accent-border); transform: translateY(-1px); }
-.pillar-icon { color: var(--accent); font-size: 1.1rem; flex-shrink: 0; }
 
 /* ── Services ── */
+.services-section { background: var(--bg); }
 .services-inner {
   max-width: 1200px;
   margin: 0 auto;
 }
-.services-header { margin-bottom: 4rem; }
-.categories {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-}
-.category-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
+.services-header { margin-bottom: 3.5rem; }
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 .service-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.75rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  transition: border-color var(--transition), transform var(--transition);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .service-card:hover {
-  border-color: #2A2A2A;
-  transform: translateY(-2px);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
 }
 .service-card-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: 'Anton', sans-serif;
+  font-weight: normal;
+  font-size: 1.7rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 .service-card-tagline {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 600;
 }
 .service-card-desc {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.7;
   flex: 1;
+}
+.service-card-cta {
+  margin-top: auto;
+  width: fit-content;
+  font-size: 0.82rem;
+  padding: 0.7rem 1.25rem;
 }
 
 /* ── About ── */
@@ -491,6 +493,7 @@ section { padding: 7rem 5%; }
   .about-image { display: flex; justify-content: center; }
   .about-image img { max-width: 340px; height: 400px; }
   .nav-links { display: none; }
+  .methodology-grid { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
 @media (max-width: 600px) {
