@@ -252,6 +252,79 @@ section { padding: 7rem 5%; }
   pointer-events: none;
 }
 
+/* ── Diagnóstico Real ── */
+.diagnostico {
+  background: #0A0A0A;
+  padding: 7rem 5%;
+}
+.diagnostico-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.diagnostico-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.diagnostico-eyebrow::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.diagnostico-eyebrow span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.diagnostico-heading {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+.diagnostico-heading em {
+  font-style: italic;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #B400FF;
+}
+.diagnostico-body {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 660px;
+  margin-bottom: 3rem;
+}
+.diagnostico-list {
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+.diagnostico-list li {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.diagnostico-list li::before {
+  content: '–';
+  color: #B400FF;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
 /* ── Methodology (4 MIRADAS) ── */
 .methodology {
   background: var(--bg);

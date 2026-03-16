@@ -259,8 +259,7 @@ export default async function PortfolioWebsiteTemplate() {
 
   // ── All editable site texts from BrandCore (narrativa section) ──────────────
   const metodologiaTitle   = narrative.metodologia_titulo   ?? 'Una mirada completa para una transformación real.';
-  const quoteText          = narrative.quote                ?? '// Cuando la cultura se alinea con la estrategia, el cambio deja de ser resistencia.';
-  const serviciosTitulo    = narrative.servicios_titulo     ?? 'El acompañamiento que tu empresa necesita hoy.';
+const serviciosTitulo    = narrative.servicios_titulo     ?? 'El acompañamiento que tu empresa necesita hoy.';
   const mesaHeadline       = narrative.mesa_headline        ?? 'Todo líder necesita un espacio íntimo para intercambiar miradas.';
   const aplicacionesTitulo = narrative.aplicaciones_titulo  ?? 'Herramientas digitales para líderes en movimiento.';
   const newsletterTitulo   = narrative.newsletter_titulo    ?? null;
@@ -315,6 +314,31 @@ export default async function PortfolioWebsiteTemplate() {
           ) : (
             <div className="hero-image" style={{ background: 'var(--bg-card)', borderRadius: '16px', minHeight: '480px' }} />
           )}
+        </div>
+      </section>
+
+      {/* ── DIAGNÓSTICO REAL ───────────────────────────────────────── */}
+      <section className="diagnostico">
+        <div className="diagnostico-inner reveal">
+          <div className="diagnostico-eyebrow">
+            <span>El Diagnóstico Real</span>
+          </div>
+          <h2 className="diagnostico-heading">
+            Tu empresa funciona.<br />
+            Pero podría funcionar<br />
+            <em>mucho mejor.</em>
+          </h2>
+          <p className="diagnostico-body">
+            Hay algo en los procesos que no fluye. Datos que existen pero nadie usa. Equipos que trabajan en paralelo sin saberlo. No es una crisis — es ruido acumulado. Y el ruido cuesta.
+          </p>
+          <ul className="diagnostico-list">
+            <li>Tomás decisiones con información incompleta o que llega tarde.</li>
+            <li>Tus operaciones dependen de personas, no de sistemas.</li>
+            <li>Creces en ventas pero el margen no acompaña el crecimiento.</li>
+            <li>Cada área trabaja en su propio idioma. Nadie habla el mismo.</li>
+            <li>Tenés tecnología, pero no la estás aprovechando realmente.</li>
+            <li>Sabés que hay valor invisible en tu empresa. No sabés dónde está.</li>
+          </ul>
         </div>
       </section>
 
