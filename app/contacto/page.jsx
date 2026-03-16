@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { getBrandAssets, getBrandCore } from '../../lib/base44.js';
