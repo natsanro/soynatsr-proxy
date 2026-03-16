@@ -30,7 +30,6 @@ export default async function ServiciosPage() {
 
   const mesaService = services.find(s => /mesa/i.test(s.name));
   const consultoria = services.filter(s => detectCategory(s) === 'consultoria' && !/mesa/i.test(s.name));
-  const aplicaciones = services.filter(s => detectCategory(s) === 'aplicaciones');
 
   return (
     <>
@@ -93,23 +92,17 @@ export default async function ServiciosPage() {
       )}
 
       {/* APLICACIONES */}
-      {aplicaciones.length > 0 && (
-        <>
-          <div className="servicios-category-label" style={{borderTop:'1px solid var(--gray-700)',marginTop:'2rem'}}>
-            <p style={{color:'var(--cyan)'}}>— Aplicaciones</p>
-          </div>
-          <div className="apps-grid">
-            {aplicaciones.map(svc => (
-              <div key={svc.id} className="app-card reveal">
-                <p className="app-card-label">{svc.tagline || 'Para líderes y consultores'}</p>
-                <h3>{svc.name}</h3>
-                <p>{svc.description}</p>
-                <a href="https://cuatromiradas.soynatsr.com" className="tag" target="_blank" rel="noopener" style={{color:'var(--cyan)',borderColor:'rgba(0,249,249,0.35)',textDecoration:'none'}}>Acceder →</a>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+      <div className="servicios-category-label" style={{borderTop:'1px solid var(--gray-700)',marginTop:'2rem'}}>
+        <p style={{color:'var(--cyan)'}}>— Aplicaciones</p>
+      </div>
+      <div className="apps-grid">
+        <div className="app-card reveal">
+          <p className="app-card-label">Para comunidades que perdieron el control</p>
+          <h3>Miradas</h3>
+          <p>Gestioná grupos, reuniones y decisiones sin que nada se pierda en WhatsApp. Minutas automáticas. Memoria colectiva. Estructura que escala.</p>
+          <a href="https://cuatromiradas.soynatsr.com" className="tag" target="_blank" rel="noopener" style={{color:'var(--cyan)',borderColor:'rgba(0,249,249,0.35)',textDecoration:'none'}}>Acceder →</a>
+        </div>
+      </div>
 
       <section className="center-section reveal" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',textAlign:'left',alignItems:'center'}}>
         <div>
