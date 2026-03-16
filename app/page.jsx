@@ -147,12 +147,12 @@ function truncateBio(text, maxSentences = 3, maxChars = 400) {
   return slice.slice(0, maxChars).replace(/\s+\S*$/, '') + '…';
 }
 
-// ─── 4 MIRADAS methodology pillars ───────────────────────────────────────────
+// ─── 4 MIRADAS methodology pillars — with brand accent colors ────────────────
 const MIRADAS_4 = [
-  { icon: '◈', label: 'Estratégica',    desc: 'Visión y liderazgo' },
-  { icon: '⬡', label: 'Organizacional', desc: 'Estructura y equipos' },
-  { icon: '◎', label: 'Procesos',       desc: 'Operación y sistemas' },
-  { icon: '∿', label: 'Data',           desc: 'Métricas e inteligencia' },
+  { icon: '◈', label: 'Estratégica',    desc: 'Consciencia del líder y visión',            color: '#B400FF' },
+  { icon: '⬡', label: 'Funcional',      desc: 'Procesos, roles y flujos',                  color: '#F7EA00' },
+  { icon: '∿', label: 'Data',           desc: 'Tecnología, métricas e información',        color: '#00F9F9' },
+  { icon: '◎', label: 'Organizacional', desc: 'Cultura, patrones y energía del equipo',    color: '#FF0099' },
 ];
 
 // ─── Scroll reveal script ────────────────────────────────────────────────────
@@ -304,13 +304,13 @@ export default async function PortfolioWebsiteTemplate() {
       {/* ── 4 MIRADAS METHODOLOGY ──────────────────────────────────── */}
       <div className="pillars reveal">
         <div className="pillars-inner">
-          <span className="pillars-text">Metodología</span>
+          <span className="pillars-text">Las 4 miradas con las que profundizamos</span>
           <div className="pillars-list">
             {MIRADAS_4.map(m => (
-              <span key={m.label} className="pillar-tag">
-                <span className="pillar-icon">{m.icon}</span>
+              <span key={m.label} className="pillar-tag" style={{ borderColor: `${m.color}30` }}>
+                <span className="pillar-icon" style={{ color: m.color }}>{m.icon}</span>
                 <span>
-                  <strong style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)' }}>{m.label}</strong>
+                  <strong style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: m.color }}>{m.label}</strong>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{m.desc}</span>
                 </span>
               </span>
