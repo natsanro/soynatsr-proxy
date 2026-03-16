@@ -248,7 +248,8 @@ export default async function PortfolioWebsiteTemplate() {
     null;
 
   // Contact
-  const calendlyUrl = contactBC.calendly ?? contactBC.agenda_url ?? 'https://calendly.com/natsr';
+  const calendlyUrl    = contactBC.calendly ?? contactBC.agenda_url ?? 'https://calendly.com/natsr';
+  const newsletterUrl  = contactBC.newsletter ?? contactBC.newsletter_url ?? sections?.redes_sociales?.newsletter ?? 'https://www.linkedin.com/newsletters/';
 
   return (
     <>
@@ -383,23 +384,16 @@ export default async function PortfolioWebsiteTemplate() {
       {/* ── NEWSLETTER ─────────────────────────────────────────────── */}
       <section className="newsletter">
         <div className="newsletter-box reveal">
-          <span className="section-label">Newsletter</span>
-          <h2 className="section-title">Recibí mi mirada estratégica</h2>
-          <p className="section-subtitle" style={{ marginBottom: '2.5rem' }}>
-            Comparto reflexiones sobre liderazgo, decisiones difíciles y cómo construir
-            empresas con más claridad.{' '}
-            <strong style={{ color: 'var(--text)' }}>No es marketing. Es una forma de pensar.</strong>
+          <h2 className="newsletter-title">Despeja el ruido.<br />Recibe una mirada distinta.</h2>
+          <p className="newsletter-body">
+            Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones
+            sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches,
+            son perspectivas profundas para entender tu empresa desde sus raíces y decidir
+            con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.
           </p>
-          <form className="newsletter-form" onSubmit="return false;">
-            <input
-              type="email"
-              className="newsletter-input"
-              placeholder="tu@email.com"
-              required
-            />
-            <button type="submit" className="btn-primary">Suscribirme</button>
-          </form>
-          <p className="newsletter-disclaimer">Sin spam. Podés darte de baja cuando quieras.</p>
+          <a href={newsletterUrl} className="btn-newsletter" target="_blank" rel="noopener">
+            Suscríbete a la Bitácora 4 MIRADAS
+          </a>
         </div>
       </section>
 
