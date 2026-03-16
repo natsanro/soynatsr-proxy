@@ -12,7 +12,7 @@ const CATEGORY_KEYWORDS = {
   // Only match when clearly a digital product / platform
   aplicaciones: ['plataforma', 'app ', 'software', 'sistema operativo', '4 miradas os', 'saas', 'suscripción digital', 'herramienta digital'],
   // Only match when clearly a live/group experience
-  experiencias: ['taller', 'workshop', 'mesa redonda', 'evento', 'retiro', 'cohort', 'bootcamp', 'programa grupal', 'sesión grupal', 'experiencia colectiva'],
+  experiencias: ['taller', 'workshop', 'mesa de', 'mesa redonda', 'evento', 'retiro', 'cohort', 'bootcamp', 'programa grupal', 'sesión grupal', 'experiencia colectiva'],
 };
 
 function detectCategory(svc) {
