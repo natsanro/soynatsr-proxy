@@ -24,7 +24,7 @@ export default async function ServiciosPage() {
   const calendlyUrl = brandCore.sections?.contacto?.calendly ?? 'https://calendly.com/natsr';
 
   const mesaService = services.find(s => /mesa/i.test(s.name));
-  const consultoria = services.filter(s => detectCategory(s) === 'consultoria' && !/mesa/i.test(s.name));
+  const consultoria = services.filter(s => detectCategory(s) === 'consultoria' && !/mesa/i.test(s.name) && !/miradas/i.test(s.name));
 
   return (
     <>
@@ -89,6 +89,12 @@ export default async function ServiciosPage() {
         <p style={{color:'var(--cyan)'}}>— Aplicaciones</p>
       </div>
       <div className="apps-grid">
+        <div className="app-card reveal">
+          <p className="app-card-label">Para consultores y líderes que piensan empresas completas</p>
+          <h3>4 Miradas OS</h3>
+          <p>El espacio donde organizás diagnósticos, mapeas empresas desde las 4 perspectivas y estructurás todo tu conocimiento estratégico en un solo lugar.</p>
+          <a href="https://cuatromiradas.soynatsr.com" className="tag" target="_blank" rel="noopener" style={{color:'var(--cyan)',borderColor:'rgba(0,249,249,0.35)',textDecoration:'none'}}>Acceder →</a>
+        </div>
         <div className="app-card reveal">
           <p className="app-card-label">Para comunidades que perdieron el control</p>
           <h3>Miradas</h3>
