@@ -333,10 +333,18 @@ export default async function PortfolioWebsiteTemplate() {
         </div>
       </section>
 
-      {/* ── QUOTE ──────────────────────────────────────────────────── */}
-      <div className="quote-block">
-        <p>{quoteText}</p>
-      </div>
+      {/* ── NEWSLETTER ─────────────────────────────────────────────── */}
+      <section className="newsletter">
+        <div className="newsletter-box reveal">
+          <h2 className="newsletter-title">{newsletterTitulo ?? <>Despeja el ruido.<br />Recibe una mirada distinta.</>}</h2>
+          <p className="newsletter-body">
+            {newsletterBodyText ?? <>Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches, son perspectivas profundas para entender tu empresa desde sus raíces y decidir con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.</>}
+          </p>
+          <a href={newsletterUrl} className="btn-newsletter" target="_blank" rel="noopener">
+            Suscríbete a la Bitácora 4 MIRADAS
+          </a>
+        </div>
+      </section>
 
       {/* ── CONSULTORÍA ─────────────────────────────────────────────── */}
       {consultoriaServices.length > 0 && (
@@ -436,19 +444,6 @@ export default async function PortfolioWebsiteTemplate() {
             <p>{aboutText}</p>
             {aboutTagline && <p style={{ marginTop: '1rem' }}>{aboutTagline}</p>}
           </div>
-        </div>
-      </section>
-
-      {/* ── NEWSLETTER ─────────────────────────────────────────────── */}
-      <section className="newsletter">
-        <div className="newsletter-box reveal">
-          <h2 className="newsletter-title">{newsletterTitulo ?? <>Despeja el ruido.<br />Recibe una mirada distinta.</>}</h2>
-          <p className="newsletter-body">
-            {newsletterBodyText ?? <>Cada martes, en mi newsletter <strong>Bitácora 4 MIRADAS</strong>, comparto reflexiones sobre liderazgo, estrategia, tecnología y cultura organizacional. No son parches, son perspectivas profundas para entender tu empresa desde sus raíces y decidir con claridad. Esta es una mirada que te regalo, directo a tu bandeja de entrada.</>}
-          </p>
-          <a href={newsletterUrl} className="btn-newsletter" target="_blank" rel="noopener">
-            Suscríbete a la Bitácora 4 MIRADAS
-          </a>
         </div>
       </section>
 
