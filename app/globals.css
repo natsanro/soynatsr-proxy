@@ -267,13 +267,14 @@ section { padding: 7rem 5%; }
   flex-wrap: wrap;
 }
 .pillars-text {
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   flex-shrink: 0;
   max-width: 160px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .pillars-list {
   display: flex;
