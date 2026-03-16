@@ -1,15 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getServices, getBrandAssets, getBrandCore, getCEOProfile } from '../lib/base44.js';
+import { getBrandAssets, getBrandCore } from '../lib/base44.js';
 import Nav from './components/Nav.js';
 import Cursor from './components/Cursor.js';
-
-function detectCategory(svc) {
-  if (svc.service_category) return svc.service_category.toLowerCase().replace(/\s+/g, '_');
-  const text = `${svc.name} ${svc.description} ${svc.tagline}`.toLowerCase();
-  if (['plataforma','app ','software','4 miradas os','saas'].some(k => text.includes(k))) return 'aplicaciones';
-  return 'consultoria';
-}
 
 const MIRADAS_4 = [
   { n:'1', short:'Estratégica',    label:'Mirada Estratégica',    question:'¿Qué transformar?',       desc:'Consciencia del líder · Visión · Dirección estratégica · Modelo de negocio' },
@@ -47,8 +40,8 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const [services, assets, brandCore, ceoProfile] = await Promise.all([
-    getServices(), getBrandAssets(), getBrandCore(), getCEOProfile(),
+  const [assets, brandCore] = await Promise.all([
+    getBrandAssets(), getBrandCore(),
   ]);
 
   const { sections } = brandCore;
@@ -68,11 +61,9 @@ export default async function HomePage() {
 
   const aboutAsset = assets.find(a => a.category === 'natalia' && a.id !== heroAsset?.id) || heroAsset;
 
-  const heroTitle = narrative.hero_titulo ?? position.propuesta_valor ?? 'Lo que <em>no ves</em> es lo que más te cuesta.';
-  const heroSub   = narrative.hero_subtitulo ?? position.descripcion_corta ?? 'Trabajo con líderes y empresas que quieren crecer — pero que sienten que algo invisible los frena. Mi metodología 4 Miradas™ convierte ese ruido en claridad estratégica.';
+  const heroSub = narrative.hero_subtitulo ?? position.descripcion_corta ?? 'Trabajo con líderes y empresas que quieren crecer — pero que sienten que algo invisible los frena. Mi metodología 4 Miradas™ convierte ese ruido en claridad estratégica.';
 
-  const calendlyUrl   = sections?.contacto?.calendly ?? sections?.contacto?.agenda_url ?? 'https://calendly.com/natsr';
-  const newsletterUrl = sections?.contacto?.newsletter ?? sections?.redes_sociales?.newsletter ?? 'https://www.linkedin.com/newsletters/';
+  const calendlyUrl = sections?.contacto?.calendly ?? sections?.contacto?.agenda_url ?? 'https://calendly.com/natsr';
 
   return (
     <>
