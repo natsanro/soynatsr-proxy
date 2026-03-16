@@ -4,6 +4,7 @@ import { getBrandAssets } from '../lib/base44.js';
 import Nav from './components/Nav.js';
 import Cursor from './components/Cursor.js';
 import NavigationLoader from './components/NavigationLoader.js';
+import RevealObserver from './components/RevealObserver.js';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -60,6 +61,7 @@ export default async function RootLayout({ children }) {
       <body>
         <Cursor />
         <NavigationLoader />
+        <RevealObserver />
         <Nav logoUrl={logoUrl} />
         {children}
       </body>

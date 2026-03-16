@@ -4,8 +4,6 @@ import { getBrandAssets, getBrandCore, getCEOProfile } from '../../lib/base44.js
 
 export const revalidate = 86400;
 
-const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
-
 export async function generateMetadata() {
   const assets = await getBrandAssets();
   const hero = assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) || assets.find(a => a.category === 'natalia');
@@ -104,7 +102,6 @@ export default async function SobrePage() {
         </ul>
         <p className="footer-copy">© {new Date().getFullYear()} Natalia Sánchez Rojas</p>
       </footer>
-      <script dangerouslySetInnerHTML={{ __html: REVEAL }} />
     </>
   );
 }
