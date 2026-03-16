@@ -329,35 +329,114 @@ section { padding: 7rem 5%; }
 .methodology {
   background: var(--bg);
   padding: 7rem 5%;
-  text-align: center;
 }
 .methodology-inner {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
+.methodology-header {
+  max-width: 860px;
+  margin-bottom: 5rem;
+}
+.methodology-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.methodology-eyebrow::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.methodology-eyebrow span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
 .methodology-title {
-  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  margin-bottom: 3.5rem;
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.75rem;
+}
+.methodology-title em {
+  font-style: italic;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #B400FF;
+}
+.methodology-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 700px;
 }
 .methodology-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem 4rem;
-  text-align: left;
+  gap: 0;
+  border-top: 2px solid var(--border);
+}
+.mirada-item {
+  padding: 3rem 3rem 3rem 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.mirada-item:nth-child(odd) {
+  padding-right: 4rem;
+  border-right: 1px solid var(--border);
+}
+.mirada-item:nth-child(even) {
+  padding-left: 4rem;
+  padding-right: 0;
+}
+.mirada-top-line {
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  left: 0;
+}
+.mirada-short {
+  font-style: italic;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.mirada-number {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  display: block;
 }
 .mirada-name {
-  font-family: 'Anton', sans-serif;
-  font-weight: normal;
-  font-size: 1.8rem;
-  line-height: 1.2;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+.mirada-question {
+  font-style: italic;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1rem;
+  color: var(--text-secondary);
   margin-bottom: 0.75rem;
 }
 .mirada-desc {
-  font-size: 1rem;
-  color: var(--text-secondary);
+  font-size: 0.9rem;
+  color: var(--text-muted);
   line-height: 1.7;
   margin: 0;
 }

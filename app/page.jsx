@@ -147,12 +147,12 @@ function truncateBio(text, maxSentences = 3, maxChars = 400) {
   return slice.slice(0, maxChars).replace(/\s+\S*$/, '') + '…';
 }
 
-// ─── 4 MIRADAS methodology — full descriptions matching Experience page ───────
+// ─── 4 MIRADAS methodology ───────────────────────────────────────────────────
 const MIRADAS_4 = [
-  { label: 'Mirada Estratégica',    desc: 'Consciencia del líder y visión. ¿Hacia dónde vas realmente? ¿Qué decisiones te acercan o alejan de tu propósito?',                                  color: '#B400FF' },
-  { label: 'Mirada Funcional',      desc: 'Procesos, roles y flujos. Diseñamos cómo funciona tu empresa para crecer con orden sin perder agilidad.',                                            color: '#F7EA00' },
-  { label: 'Mirada Data',           desc: 'Tecnología, métricas e información. Transformamos datos en decisiones, y la tecnología en una aliada estratégica.',                                  color: '#00F9F9' },
-  { label: 'Mirada Organizacional', desc: 'Cultura, patrones y energía del equipo. Alineamos a las personas con la estrategia para que el cambio sea evolución.',                              color: '#FF0099' },
+  { number: '01', short: 'Estratégica',    label: 'Mirada Estratégica',    question: '¿Qué transformar?',       keywords: 'Consciencia del líder · Visión · Dirección estratégica · Modelo de negocio',  color: '#B400FF' },
+  { number: '02', short: 'Funcional',      label: 'Mirada Funcional',      question: '¿Cómo opera el sistema?', keywords: 'Procesos · Roles · Flujos de trabajo · Eficiencia operacional',                color: '#F7EA00' },
+  { number: '03', short: 'Data',           label: 'Mirada Data',           question: '¿Qué se mide?',           keywords: 'Tecnología · Métricas · Gaps de información · Decisiones basadas en datos',   color: '#00F9F9' },
+  { number: '04', short: 'Organizacional', label: 'Mirada Organizacional', question: '¿Qué opera debajo?',      keywords: 'Cultura · Patrones invisibles · Energía del equipo · Liderazgo consciente',  color: '#FF0099' },
 ];
 
 // ─── Scroll reveal script ────────────────────────────────────────────────────
@@ -344,13 +344,26 @@ const serviciosTitulo    = narrative.servicios_titulo     ?? 'El acompañamiento
 
       {/* ── 4 MIRADAS METHODOLOGY ──────────────────────────────────── */}
       <section id="metodologia" className="methodology">
-        <div className="methodology-inner reveal">
-          <h2 className="methodology-title">{metodologiaTitle}</h2>
+        <div className="methodology-inner">
+          <div className="methodology-header reveal">
+            <div className="methodology-eyebrow"><span>La Metodología</span></div>
+            <h2 className="methodology-title">
+              Cuatro miradas.<br />
+              Una transformación <em>completa.</em>
+            </h2>
+            <p className="methodology-subtitle">
+              4 Miradas™ no es un diagnóstico estándar. Es un sistema de cuatro perspectivas simultáneas que revela qué está pasando, por qué ocurre y qué hacer al respecto — con claridad que se puede accionar hoy.
+            </p>
+          </div>
           <div className="methodology-grid">
             {MIRADAS_4.map(m => (
-              <div key={m.label} className="mirada-item">
-                <h3 className="mirada-name" style={{ color: m.color }}>{m.label}</h3>
-                <p className="mirada-desc">{m.desc}</p>
+              <div key={m.label} className="mirada-item reveal">
+                <div className="mirada-top-line" style={{ background: m.color }} />
+                <span className="mirada-short" style={{ color: m.color }}>{m.short}</span>
+                <span className="mirada-number" style={{ color: m.color }}>{m.number} · MIRADA</span>
+                <h3 className="mirada-name">{m.label}</h3>
+                <p className="mirada-question">{m.question}</p>
+                <p className="mirada-desc">{m.keywords}</p>
               </div>
             ))}
           </div>
