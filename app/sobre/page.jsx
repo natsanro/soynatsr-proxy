@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { getBrandAssets, getBrandCore, getCEOProfile } from '../../lib/base44.js';
 import Nav from '../components/Nav.js';
 import Cursor from '../components/Cursor.js';
@@ -105,7 +106,7 @@ export default async function SobrePage() {
       <footer>
         <div className="footer-brand">{logoUrl ? <Image src={logoUrl} alt="Soy Nat SR" width={120} height={36} style={{objectFit:'contain'}} /> : <>NAT<span>.</span></>}</div>
         <ul className="footer-links">
-          <li><a href="/metodo">4 Miradas™</a></li><li><a href="/servicios">Servicios</a></li><li><a href="/contacto">Contacto</a></li>
+          <li><Link href="/metodo">4 Miradas™</Link></li><li><Link href="/servicios">Servicios</Link></li><li><Link href="/contacto">Contacto</Link></li>
         </ul>
         <p className="footer-copy">© {new Date().getFullYear()} Natalia Sánchez Rojas</p>
       </footer>

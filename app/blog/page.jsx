@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import { getBrandAssets, getBrandCore } from '../../lib/base44.js';
 import Nav from '../components/Nav.js';
 import Cursor from '../components/Cursor.js';
@@ -70,19 +72,19 @@ export default async function BlogPage() {
 
       <section style={{padding:'5rem 4rem',borderTop:'1px solid var(--gray-700)',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'3rem'}} className="reveal">
         <div>
-          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(1.5rem,2.5vw,2.2rem)',fontWeight:'700',marginBottom:'0.8rem'}}>Recibe la Bitácora cada martes.</h2>
+          <h2 style={{fontFamily:'var(--font-playfair),serif',fontSize:'clamp(1.5rem,2.5vw,2.2rem)',fontWeight:'700',marginBottom:'0.8rem'}}>Recibe la Bitácora cada martes.</h2>
           <p style={{color:'var(--gray-300)',fontSize:'0.88rem'}}>Ideas estratégicas sin ruido. Directo a tu correo.</p>
         </div>
         <div style={{display:'flex',gap:'0',maxWidth:'400px',width:'100%'}}>
-          <input type="email" placeholder="tu@email.com" style={{flex:'1',background:'var(--gray-900)',border:'1px solid var(--gray-700)',borderRight:'none',color:'var(--white)',padding:'1rem 1.2rem',fontFamily:"'Syne',sans-serif",fontSize:'0.88rem',outline:'none'}} />
+          <input type="email" placeholder="tu@email.com" style={{flex:'1',background:'var(--gray-900)',border:'1px solid var(--gray-700)',borderRight:'none',color:'var(--white)',padding:'1rem 1.2rem',fontFamily:'var(--font-syne),sans-serif',fontSize:'0.88rem',outline:'none'}} />
           <a href={newsletterUrl} className="btn-primary" target="_blank" rel="noopener" style={{whiteSpace:'nowrap'}}>Suscribirse</a>
         </div>
       </section>
 
       <footer>
-        <div className="footer-brand">{logoUrl ? <img src={logoUrl} alt="Soy Nat SR" /> : <>NAT<span>.</span></>}</div>
+        <div className="footer-brand">{logoUrl ? <Image src={logoUrl} alt="Soy Nat SR" width={120} height={36} style={{objectFit:'contain'}} /> : <>NAT<span>.</span></>}</div>
         <ul className="footer-links">
-          <li><a href="/">Inicio</a></li><li><a href="/metodo">4 Miradas™</a></li><li><a href="/contacto">Contacto</a></li>
+          <li><Link href="/">Inicio</Link></li><li><Link href="/metodo">4 Miradas™</Link></li><li><Link href="/contacto">Contacto</Link></li>
         </ul>
         <p className="footer-copy">© {new Date().getFullYear()} Natalia Sánchez Rojas</p>
       </footer>

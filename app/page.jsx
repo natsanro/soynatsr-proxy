@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { getServices, getBrandAssets, getBrandCore, getCEOProfile } from '../lib/base44.js';
 import Nav from './components/Nav.js';
 import Cursor from './components/Cursor.js';
@@ -89,8 +90,8 @@ export default async function HomePage() {
           </h1>
           <p className="hero-body anim-fade-up anim-delay-3">{heroSub}</p>
           <div className="hero-actions anim-fade-up anim-delay-4">
-            <a href="/metodo" className="btn-primary">Conocer el método</a>
-            <a href="/contacto" className="btn-outline">Agendar sesión</a>
+            <Link href="/metodo" className="btn-primary">Conocer el método</Link>
+            <Link href="/contacto" className="btn-outline">Agendar sesión</Link>
           </div>
           <div className="hero-scroll anim-fade-up anim-delay-5">Sigue leyendo</div>
         </div>
@@ -153,7 +154,7 @@ export default async function HomePage() {
           ))}
         </div>
         <div style={{marginTop:'3rem'}} className="reveal">
-          <a href="/metodo" className="btn-primary">Ver el método completo</a>
+          <Link href="/metodo" className="btn-primary">Ver el método completo</Link>
         </div>
       </section>
 
@@ -165,8 +166,8 @@ export default async function HomePage() {
           <p>He pasado años trabajando con empresas que hacen bien muchas cosas, pero que no ven con claridad lo que las limita. <strong>Empecé a notar un patrón:</strong> el problema casi nunca está donde el líder cree que está.</p>
           <p>Está en los espacios entre las áreas. En los datos que se ignoran. En las decisiones que se toman por inercia. <strong>En lo que nadie se atreve a nombrar en la reunión.</strong></p>
           <div style={{marginTop:'2.5rem',display:'flex',gap:'1rem',flexWrap:'wrap'}}>
-            <a href="/sobre" className="btn-primary">Mi historia</a>
-            <a href="/metodo" className="btn-outline">El método</a>
+            <Link href="/sobre" className="btn-primary">Mi historia</Link>
+            <Link href="/metodo" className="btn-outline">El método</Link>
           </div>
         </div>
         <div className="home-nat-visual reveal" style={{position:'relative'}}>
@@ -195,10 +196,10 @@ export default async function HomePage() {
           {logoUrl ? <Image src={logoUrl} alt="Soy Nat SR" width={120} height={36} style={{objectFit:'contain'}} /> : <>NAT<span>.</span></>}
         </div>
         <ul className="footer-links">
-          <li><a href="/metodo">4 Miradas™</a></li>
-          <li><a href="/servicios">Servicios</a></li>
-          <li><a href="/blog">Bitácora</a></li>
-          <li><a href="/contacto">Contacto</a></li>
+          <li><Link href="/metodo">4 Miradas™</Link></li>
+          <li><Link href="/servicios">Servicios</Link></li>
+          <li><Link href="/blog">Bitácora</Link></li>
+          <li><Link href="/contacto">Contacto</Link></li>
         </ul>
         <p className="footer-copy">© {new Date().getFullYear()} Natalia Sánchez Rojas</p>
       </footer>
