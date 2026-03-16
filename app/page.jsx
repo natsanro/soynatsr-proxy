@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getServices, getBrandAssets, getBrandCore, getCEOProfile } from '../lib/base44.js';
 import Nav from './components/Nav.js';
 import Cursor from './components/Cursor.js';
@@ -83,9 +84,9 @@ export default async function HomePage() {
           </div>
           <div className="hero-scroll anim-fade-up anim-delay-5">Sigue leyendo</div>
         </div>
-        <div className="hero-right">
+        <div className="hero-right" style={{position:'relative'}}>
           {heroAsset?.file_url
-            ? <img className="anim-fade-in" src={heroAsset.file_url} alt="Natalia Sánchez Rojas" />
+            ? <Image fill priority className="anim-fade-in" src={heroAsset.file_url} alt="Natalia Sánchez Rojas" style={{objectFit:'cover'}} />
             : <div style={{width:'100%',height:'100%',background:'var(--gray-900)'}} />
           }
           <div className="hero-right-overlay" />
@@ -158,9 +159,9 @@ export default async function HomePage() {
             <a href="/metodo" className="btn-outline">El método</a>
           </div>
         </div>
-        <div className="home-nat-visual reveal">
+        <div className="home-nat-visual reveal" style={{position:'relative'}}>
           {aboutAsset?.file_url
-            ? <img src={aboutAsset.file_url} alt="Natalia Sánchez Rojas" />
+            ? <Image fill src={aboutAsset.file_url} alt="Natalia Sánchez Rojas" style={{objectFit:'cover'}} />
             : <div style={{width:'100%',height:'500px',background:'var(--gray-900)'}} />
           }
           <div className="home-nat-badge">
@@ -181,7 +182,7 @@ export default async function HomePage() {
       {/* ── FOOTER ── */}
       <footer>
         <div className="footer-brand">
-          {logoUrl ? <img src={logoUrl} alt="Soy Nat SR" /> : <>NAT<span>.</span></>}
+          {logoUrl ? <Image src={logoUrl} alt="Soy Nat SR" width={120} height={36} style={{objectFit:'contain'}} /> : <>NAT<span>.</span></>}
         </div>
         <ul className="footer-links">
           <li><a href="/metodo">4 Miradas™</a></li>

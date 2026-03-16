@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export default function Nav({ logoUrl }) {
@@ -12,7 +13,7 @@ export default function Nav({ logoUrl }) {
     <nav>
       <Link href="/" className="nav-logo">
         {logoUrl
-          ? <img src={logoUrl} alt="Soy Nat SR" />
+          ? <Image src={logoUrl} alt="Soy Nat SR" width={120} height={36} style={{objectFit:'contain'}} />
           : <>NAT<span>.</span></>
         }
       </Link>

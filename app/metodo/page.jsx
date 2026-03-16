@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getBrandAssets, getBrandCore } from '../../lib/base44.js';
 import Nav from '../components/Nav.js';
 import Cursor from '../components/Cursor.js';
@@ -117,7 +118,7 @@ export default async function MetodoPage() {
       </section>
 
       <footer>
-        <div className="footer-brand">{logoUrl ? <img src={logoUrl} alt="Soy Nat SR" /> : <>NAT<span>.</span></>}</div>
+        <div className="footer-brand">{logoUrl ? <Image src={logoUrl} alt="Soy Nat SR" width={120} height={36} style={{objectFit:'contain'}} /> : <>NAT<span>.</span></>}</div>
         <ul className="footer-links">
           <li><a href="/">Inicio</a></li><li><a href="/servicios">Servicios</a></li><li><a href="/contacto">Contacto</a></li>
         </ul>
