@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getServices, getBrandAssets, getBrandCore } from '../../lib/base44.js';
-import Nav from '../components/Nav.js';
-import Cursor from '../components/Cursor.js';
+import { getServices, getBrandCore } from '../../lib/base44.js';
 
 const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
 
@@ -22,10 +20,7 @@ function detectCategory(svc) {
 }
 
 export default async function ServiciosPage() {
-  const [services, assets, brandCore] = await Promise.all([getServices(), getBrandAssets(), getBrandCore()]);
-  const isLogoType = (t) => t && ['logo','logos'].includes(t.toLowerCase());
-  const logoAsset = assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title??''} ${a.notes??''}`)) || assets.find(a => isLogoType(a.asset_type));
-  const logoUrl = logoAsset?.file_url ?? null;
+  const [services, brandCore] = await Promise.all([getServices(), getBrandCore()]);
   const calendlyUrl = brandCore.sections?.contacto?.calendly ?? 'https://calendly.com/natsr';
 
   const mesaService = services.find(s => /mesa/i.test(s.name));
@@ -33,8 +28,6 @@ export default async function ServiciosPage() {
 
   return (
     <>
-      <Cursor />
-      <Nav logoUrl={logoUrl} />
       <section className="servicios-hero">
         <div className="label">Servicios</div>
         <h1>No hay un formato<br />único.<br /><em>Hay el tuyo.</em></h1>

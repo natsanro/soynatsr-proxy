@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getBrandAssets, getBrandCore, getCEOProfile } from '../../lib/base44.js';
-import Nav from '../components/Nav.js';
-import Cursor from '../components/Cursor.js';
 
 const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
 
@@ -19,9 +17,6 @@ export async function generateMetadata() {
 
 export default async function SobrePage() {
   const [assets, brandCore, ceoProfile] = await Promise.all([getBrandAssets(), getBrandCore(), getCEOProfile()]);
-  const isLogoType = (t) => t && ['logo','logos'].includes(t.toLowerCase());
-  const logoAsset = assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title??''} ${a.notes??''}`)) || assets.find(a => isLogoType(a.asset_type));
-  const logoUrl = logoAsset?.file_url ?? null;
   const calendlyUrl = brandCore.sections?.contacto?.calendly ?? 'https://calendly.com/natsr';
 
   const heroAsset = assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) || assets.find(a => a.category === 'natalia');
@@ -29,9 +24,6 @@ export default async function SobrePage() {
 
   return (
     <>
-      <Cursor />
-      <Nav logoUrl={logoUrl} />
-
       <section className="sobre-hero">
         <div className="sobre-hero-left">
           <div className="label">Quién soy</div>

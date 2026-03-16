@@ -1,5 +1,8 @@
 import { Playfair_Display, DM_Mono, Syne } from 'next/font/google';
 import './globals.css';
+import { getBrandAssets } from '../lib/base44.js';
+import Nav from './components/Nav.js';
+import Cursor from './components/Cursor.js';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -43,10 +46,19 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const assets = await getBrandAssets();
+  const isLogoType = (t) => t && ['logo','logos'].includes(t.toLowerCase());
+  const logoAsset = assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title??''} ${a.notes??''}`)) || assets.find(a => isLogoType(a.asset_type));
+  const logoUrl = logoAsset?.file_url ?? null;
+
   return (
     <html lang="es" className={`${playfair.variable} ${dmMono.variable} ${syne.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Cursor />
+        <Nav logoUrl={logoUrl} />
+        {children}
+      </body>
     </html>
   );
 }

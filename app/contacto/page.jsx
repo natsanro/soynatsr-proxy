@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBrandAssets, getBrandCore } from '../../lib/base44.js';
-import Nav from '../components/Nav.js';
-import Cursor from '../components/Cursor.js';
+import { getBrandCore } from '../../lib/base44.js';
 
 export const metadata = {
   title: 'Contacto — Natalia Sánchez Rojas',
@@ -14,16 +12,11 @@ export const metadata = {
 const FORM_SCRIPT = `document.querySelector('.contact-form')?.addEventListener('submit',function(e){e.preventDefault();var btn=e.target.querySelector('.form-submit');btn.textContent='✓ Mensaje enviado';btn.style.background='#1a8a1a';setTimeout(function(){btn.textContent='Enviar mensaje';btn.style.background='';},3000);});`;
 
 export default async function ContactoPage() {
-  const [assets, brandCore] = await Promise.all([getBrandAssets(), getBrandCore()]);
-  const isLogoType = (t) => t && ['logo','logos'].includes(t.toLowerCase());
-  const logoAsset = assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title??''} ${a.notes??''}`)) || assets.find(a => isLogoType(a.asset_type));
-  const logoUrl = logoAsset?.file_url ?? null;
+  const brandCore = await getBrandCore();
   const calendlyUrl = brandCore.sections?.contacto?.calendly ?? 'https://calendly.com/natsr';
 
   return (
     <>
-      <Cursor />
-      <Nav logoUrl={logoUrl} />
       <div className="contacto-wrap">
         <div className="contacto-left">
           <div className="label">Hablemos</div>

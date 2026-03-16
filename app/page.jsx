@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getBrandAssets, getBrandCore } from '../lib/base44.js';
-import Nav from './components/Nav.js';
-import Cursor from './components/Cursor.js';
 
 const MIRADAS_4 = [
   { n:'1', short:'Estratégica',    label:'Mirada Estratégica',    question:'¿Qué transformar?',       desc:'Consciencia del líder · Visión · Dirección estratégica · Modelo de negocio' },
@@ -48,12 +46,6 @@ export default async function HomePage() {
   const narrative = sections?.narrativa ?? {};
   const position  = sections?.posicionamiento ?? {};
 
-  const isLogoType = (t) => t && ['logo','logos'].includes(t.toLowerCase());
-  const logoAsset =
-    assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title??''} ${a.notes??''}`)) ||
-    assets.find(a => isLogoType(a.asset_type));
-  const logoUrl = logoAsset?.file_url ?? null;
-
   const heroAsset =
     assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) ||
     assets.find(a => a.category === 'natalia') ||
@@ -67,9 +59,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <Cursor />
-      <Nav logoUrl={logoUrl} />
-
       {/* ── HERO ── */}
       <section className="hero">
         <div className="hero-left">

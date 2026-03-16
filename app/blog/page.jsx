@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBrandAssets, getBrandCore } from '../../lib/base44.js';
-import Nav from '../components/Nav.js';
-import Cursor from '../components/Cursor.js';
+import { getBrandCore } from '../../lib/base44.js';
 
 const REVEAL = `(function(){var els=document.querySelectorAll('.reveal');if(!els.length)return;var io=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting){setTimeout(function(){e.target.classList.add('visible')},i*90);io.unobserve(e.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});els.forEach(function(el){io.observe(el);});})();`;
 
@@ -28,16 +26,11 @@ const POSTS_GRID = [
 ];
 
 export default async function BlogPage() {
-  const [assets, brandCore] = await Promise.all([getBrandAssets(), getBrandCore()]);
-  const isLogoType = (t) => t && ['logo','logos'].includes(t.toLowerCase());
-  const logoAsset = assets.find(a => isLogoType(a.asset_type) && /negro|dark|blanca|white/i.test(`${a.title??''} ${a.notes??''}`)) || assets.find(a => isLogoType(a.asset_type));
-  const logoUrl = logoAsset?.file_url ?? null;
+  const brandCore = await getBrandCore();
   const newsletterUrl = brandCore.sections?.contacto?.newsletter ?? brandCore.sections?.redes_sociales?.newsletter ?? 'https://www.linkedin.com/newsletters/';
 
   return (
     <>
-      <Cursor />
-      <Nav logoUrl={logoUrl} />
       <section className="blog-hero">
         <div className="label">Pensamiento estratégico</div>
         <h1>Bitácora<br /><em>Estratégica</em></h1>
