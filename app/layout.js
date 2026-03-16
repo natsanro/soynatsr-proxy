@@ -27,6 +27,8 @@ const syne = Syne({
   display: 'swap',
 });
 
+export const revalidate = 86400;
+
 export const metadata = {
   title: 'Natalia Sánchez Rojas — Estrategia · 4 Miradas™',
   description: 'Trabajo con líderes y empresas que quieren crecer — pero que sienten que algo invisible los frena. Mi metodología 4 Miradas™ convierte ese ruido en claridad estratégica.',

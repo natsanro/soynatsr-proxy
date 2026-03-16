@@ -27,6 +27,8 @@ const REVEAL_SCRIPT = `(function(){
   els.forEach(function(el){io.observe(el);});
 })();`;
 
+export const revalidate = 86400;
+
 export async function generateMetadata() {
   const assets = await getBrandAssets();
   const hero = assets.find(a => a.category === 'natalia' && (a.asset_type === 'photo' || a.asset_type === 'hero')) || assets.find(a => a.category === 'natalia');
@@ -152,7 +154,7 @@ export default async function HomePage() {
         </div>
         <div className="home-nat-visual reveal" style={{position:'relative'}}>
           {aboutAsset?.file_url
-            ? <Image fill src={aboutAsset.file_url} alt="Natalia Sánchez Rojas" style={{objectFit:'cover'}} />
+            ? <Image fill src={aboutAsset.file_url} alt="Natalia Sánchez Rojas" style={{objectFit:'cover', objectPosition:'top center'}} />
             : <div style={{width:'100%',height:'500px',background:'var(--gray-900)'}} />
           }
           <div className="home-nat-badge">

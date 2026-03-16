@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getBrandCore } from '../../lib/base44.js';
 
+export const revalidate = 86400;
+
 export const metadata = {
   title: 'Contacto — Natalia Sánchez Rojas',
   description: 'Agendá una sesión estratégica de 60 minutos sin costo. La primera mirada es gratis.',
