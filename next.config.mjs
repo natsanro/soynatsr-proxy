@@ -3,5 +3,13 @@ const nextConfig = {
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
   },
+  async headers() {
+    return [
+      {
+        source: '/servicios',
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
+      },
+    ];
+  },
 };
 export default nextConfig;
